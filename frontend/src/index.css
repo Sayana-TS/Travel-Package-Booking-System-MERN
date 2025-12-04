@@ -1,1 +1,52 @@
 @import "tailwindcss";
+
+/* Tailwind Theme Variables */
+@theme {
+  --color-primary: #056bd1;
+  --color-background-light: #f5f7f8;
+  --color-background-dark: #0f1923;
+
+  /* Added missing custom colors */
+  --color-subtext-dark: #9ca3af;
+  --color-card-dark: rgba(255, 255, 255, 0.1);
+
+  --font-display: "Inter", sans-serif;
+}
+
+/* Animations */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes fadeIn {
+  0%, 100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+/* Navbar Link Styles */
+.nav-link {
+  @apply text-sm font-medium text-subtext-dark hover:text-primary transition-colors text-white;
+}
+
+/* Icon Button Styles */
+.icon-btn {
+  @apply p-2 rounded-full hover:bg-card-dark transition-colors text-subtext-dark;
+}
+
+/* Hide scrollbar but keep scroll */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}

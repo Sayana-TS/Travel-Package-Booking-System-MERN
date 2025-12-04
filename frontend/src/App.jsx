@@ -1,10 +1,20 @@
 import React from 'react'
+import { BrowserRouter, Routes } from 'react-router-dom'
+import { adminRoutes } from './Modules/Admin/Admin.Routes'
+import { agentRoutes } from './Modules/Agent/Agent.Routes'
+import { userRoutes } from './Modules/User/User.Routes'
 
 const App = () => {
   return (
-    <div>
-      <h1 class="text-3xl font-bold underline">Hello Travel Booking System</h1>
-    </div>
+    <>
+      <BrowserRouter>
+        <Routes>
+          {userRoutes}
+          {agentRoutes}
+          {adminRoutes}
+        </Routes>
+      </BrowserRouter>
+    </>
   )
 }
 
