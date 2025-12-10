@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import UserLayout from "../Layouts/UserLayout";
 import FilterSidebar from "../Components/FilterSidebar";
 import PackageCard from "../components/PackageCard";
@@ -29,6 +29,8 @@ const PackagesPage = () => {
     sortBy: "",
     price: [500, 2000],
   });
+
+  const navigate = useNavigate()
 
   // -----------------------
   // Load query params from URL
@@ -211,7 +213,7 @@ const PackagesPage = () => {
                 duration={pkg.duration}
                 price={pkg.price}
                 cta={
-                  <button className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/80 transition">
+                  <button onClick={()=>navigate('/packageDetail')} className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/80 transition">
                     Book Now
                   </button>
                 }

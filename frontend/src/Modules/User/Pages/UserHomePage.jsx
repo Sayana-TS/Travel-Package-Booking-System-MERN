@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import UserLayout from "../layouts/UserLayout";
+import { useNavigate } from "react-router-dom";
+import UserLayout from "../Layouts/UserLayout";
 import HeroSection from "../Components/HeroSection";
 import CategorySection from "../components/CategorySection";
 import PackageCard from "../components/PackageCard";
@@ -19,6 +20,8 @@ import {
 
 const UserHomePage = () => {
   const [tab, setTab] = useState("ongoing");
+
+  const navigate = useNavigate()
   return (
     <UserLayout>
       <HeroSection />
@@ -31,7 +34,7 @@ const UserHomePage = () => {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
           {recommended.map((pkg) => (
-            <PackageCard key={pkg.title} {...pkg} cta={<a className="px-4 py-2 bg-primary/20 text-primary font-semibold rounded-lg hover:bg-primary hover:text-white transition-colors" href="#">View Details</a>} />
+            <PackageCard key={pkg.title} {...pkg} cta={<button onClick={()=>navigate('/packageDetail')} className="px-4 py-2 bg-primary/20 text-primary font-semibold rounded-lg hover:bg-primary hover:text-white transition-colors">View Details</button>} />
           ))}
         </div>
       </section>
@@ -43,7 +46,7 @@ const UserHomePage = () => {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {featured.map((pkg) => (
-            <WidePackageCard key={pkg.title} {...pkg} cta={<a className="px-4 py-2 bg-primary text-white font-semibold rounded-lg hover:opacity-90 transition-opacity" href="#">View Details</a>} />
+            <WidePackageCard key={pkg.title} {...pkg} cta={<button onClick={()=>navigate('/packageDetail')} className="px-4 py-2 bg-primary text-white font-semibold rounded-lg hover:opacity-90 transition-opacity">View Details</button>} />
           ))}
         </div>
       </section>
@@ -59,14 +62,14 @@ const UserHomePage = () => {
         {tab === "ongoing" && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
             {ongoing.map((pkg) => (
-              <PackageCard key={pkg.title} {...pkg} cta={<a className="block w-full text-center px-4 py-2 bg-primary/20 text-primary font-semibold rounded-lg hover:bg-primary hover:text-white transition-colors" href="#">View Details</a>} />
+              <PackageCard key={pkg.title} {...pkg} cta={<button onClick={()=>navigate('/packageDetail')} className="block w-full text-center px-4 py-2 bg-primary/20 text-primary font-semibold rounded-lg hover:bg-primary hover:text-white transition-colors">View Details</button>} />
             ))}
           </div>
         )}
         {tab === "upcoming" && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
             {upcoming.map((pkg) => (
-              <PackageCard key={pkg.title} {...pkg} cta={<a className="block w-full text-center px-4 py-2 bg-primary/20 text-primary font-semibold rounded-lg hover:bg-primary hover:text-white transition-colors" href="#">View Details</a>} />
+              <PackageCard key={pkg.title} {...pkg} cta={<button onClick={()=>navigate('/packageDetail')} className="block w-full text-center px-4 py-2 bg-primary/20 text-primary font-semibold rounded-lg hover:bg-primary hover:text-white transition-colors">View Details</button>} />
             ))}
           </div>
         )}
@@ -82,7 +85,7 @@ const UserHomePage = () => {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
           {popular.map((pkg) => (
-            <PackageCard key={pkg.title} {...pkg} cta={<a className="block w-full text-center px-4 py-2 bg-primary/20 text-primary font-semibold rounded-lg hover:bg-primary hover:text-white transition-colors" href="#">View Details</a>} />
+            <PackageCard key={pkg.title} {...pkg} cta={<button onClick={()=>navigate('/packageDetail')} className="block w-full text-center px-4 py-2 bg-primary/20 text-primary font-semibold rounded-lg hover:bg-primary hover:text-white transition-colors">View Details</button>} />
           ))}
         </div>
       </section>
@@ -98,7 +101,7 @@ const UserHomePage = () => {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {budgetFriendly.map((pkg) => (
-            <WidePackageCard key={pkg.title} {...pkg} cta={<a className="px-4 py-2 bg-primary/20 text-primary font-semibold rounded-lg hover:bg-primary hover:text-white transition-colors" href="#">View Details</a>} />
+            <WidePackageCard key={pkg.title} {...pkg} cta={<button onClick={()=>navigate('/packageDetail')} className="px-4 py-2 bg-primary/20 text-primary font-semibold rounded-lg hover:bg-primary hover:text-white transition-colors">View Details</button>} />
           ))}
         </div>
       </section>
