@@ -4,6 +4,7 @@ import UserHomePage from "./Pages/UserHomePage";
 import PackagesPage from "./Pages/PackagesPage";
 import PackageDetailPage from "./Pages/PackageDetailPage";
 import BookingPage from "./Pages/BookingPage";
+import BookingConfirmationPage from "./Pages/BookingConfirmationPage";
 
 export const userRoutes = (
   <>
@@ -13,5 +14,6 @@ export const userRoutes = (
     <Route path="/packages" element={<PackagesPage />} />
     <Route path="/packageDetail" element={<PackageDetailPage/>} />
     <Route path="/booking" element={<BookingPage/>} />
+    <Route path="/bookingConfirm" element={<BookingConfirmationPage/>} />
   </>
 );
