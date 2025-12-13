@@ -7,6 +7,7 @@ import BookingPage from "./Pages/BookingPage";
 import BookingConfirmationPage from "./Pages/BookingConfirmationPage";
 import BookingHistoryPage from "./Pages/BookingHistoryPage";
 import BookingDetailPage from "./Pages/BookingDetailPage";
+import FavoritesPage from "./Pages/FavoritesPage";
 
 export const userRoutes = (
   <>
@@ -19,5 +20,6 @@ export const userRoutes = (
     <Route path="/bookingConfirm" element={<BookingConfirmationPage/>} />
     <Route path="/bookingHistory" element={<BookingHistoryPage/>} />
     <Route path="/bookingDetail" element={<BookingDetailPage/>} />
+    <Route path="/favorites" element={<FavoritesPage/>} />
   </>
 );
