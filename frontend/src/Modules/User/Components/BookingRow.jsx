@@ -1,4 +1,5 @@
 import React from 'react';
+import {useNavigate} from 'react-router-dom'
 
 // Helper function to determine badge style based on status text
 const getStatusBadgeClasses = (status) => {
@@ -32,14 +33,19 @@ const BookingRow = ({ booking, isUpcoming }) => {
         window.location.href = url;
     };
 
+    const navigate = useNavigate()
+
     // Handler to stop the row click event when clicking any action link
     const handleActionClick = (e) => {
         e.stopPropagation();
+        navigate('/bookingDetail')
         console.log("Action Link Clicked. Row navigation prevented.");
     };
 
     // Check status for conditional rendering
     const isConfirmed = booking.status === 'Confirmed'; 
+
+    
 
     return (
         <tr 
@@ -66,8 +72,7 @@ const BookingRow = ({ booking, isUpcoming }) => {
                         {!isConfirmed && (
                             <>
                                 <a 
-                                    className="text-primary hover:text-primary/80" 
-                                    href={`/modify-booking/${booking.id}`} 
+                                    className="text-primary hover:text-primary/80"  
                                     onClick={handleActionClick} 
                                 >
                                     Modify
@@ -80,8 +85,7 @@ const BookingRow = ({ booking, isUpcoming }) => {
                         {isConfirmed && (
                             <>
                                 <a 
-                                    className="text-primary hover:text-primary/80" 
-                                    href={`/bookings/manage/${booking.id}`} 
+                                    className="text-primary hover:text-primary/80"  
                                     onClick={handleActionClick} 
                                 >
                                     View/Manage
@@ -93,7 +97,6 @@ const BookingRow = ({ booking, isUpcoming }) => {
                         {/* ALWAYS SHOW CANCEL */}
                         <a 
                             className="text-red-500 hover:text-red-600" 
-                            href={`/cancel-booking/${booking.id}`} 
                             onClick={handleActionClick} 
                         >
                             Cancel
@@ -102,8 +105,7 @@ const BookingRow = ({ booking, isUpcoming }) => {
                 ) : (
                     // Action for PAST bookings
                     <a 
-                        className="text-primary hover:text-primary/80" 
-                        href={`/bookings/details/${booking.id}`} 
+                        className="text-primary hover:text-primary/80"  
                         onClick={handleActionClick} // ACTION LINK: Must stop propagation
                     >
                         View Details
