@@ -8,6 +8,8 @@ import BookingConfirmationPage from "./Pages/BookingConfirmationPage";
 import BookingHistoryPage from "./Pages/BookingHistoryPage";
 import BookingDetailPage from "./Pages/BookingDetailPage";
 import FavoritesPage from "./Pages/FavoritesPage";
+import ProfilePage from "./Pages/ProfilePage";
+import ContactUsPage from "./Pages/ContactUsPage";
 
 export const userRoutes = (
   <>
@@ -21,5 +23,7 @@ export const userRoutes = (
     <Route path="/bookingHistory" element={<BookingHistoryPage/>} />
     <Route path="/bookingDetail" element={<BookingDetailPage/>} />
     <Route path="/favorites" element={<FavoritesPage/>} />
+    <Route path="/profile" element={<ProfilePage/>} />
+    <Route path="/contactus" element={<ContactUsPage/>} />
   </>
 );
