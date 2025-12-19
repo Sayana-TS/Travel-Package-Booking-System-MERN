@@ -14,10 +14,10 @@ const CONFIRMATION_DATA = {
     travelers: "2 Adults",
     totalPrice: "$1,500 (Includes taxes and fees)",
     breadcrumbPath: [
-        { label: 'Home', href: '#' },
+        { label: 'Home', href: '/' },
         { label: 'Packages', href: '#' },
-        { label: 'Mountain Escape', href: '#' },
-        { label: 'Booking', href: '#' },
+        { label: 'Mountain Escape', href: '/packageDetail' },
+        { label: 'Booking', href: '/booking' },
     ]
 };
 

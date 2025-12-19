@@ -1,5 +1,5 @@
 import React from 'react';
-import {useNavigate} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 
 // Helper function to determine badge style based on status text
 const getStatusBadgeClasses = (status) => {
@@ -38,7 +38,6 @@ const BookingRow = ({ booking, isUpcoming }) => {
     // Handler to stop the row click event when clicking any action link
     const handleActionClick = (e) => {
         e.stopPropagation();
-        navigate('/bookingDetail')
         console.log("Action Link Clicked. Row navigation prevented.");
     };
 
@@ -71,12 +70,13 @@ const BookingRow = ({ booking, isUpcoming }) => {
                         {/* Action for PENDING bookings */}
                         {!isConfirmed && (
                             <>
-                                <a 
+                                <Link 
+                                    to='/bookingDetail'
                                     className="text-primary hover:text-primary/80"  
                                     onClick={handleActionClick} 
                                 >
                                     Modify
-                                </a>
+                                </Link>
                                 <span className="text-gray-400 dark:text-gray-600">|</span>
                             </>
                         )}
@@ -84,32 +84,34 @@ const BookingRow = ({ booking, isUpcoming }) => {
                         {/* Action for CONFIRMED bookings */}
                         {isConfirmed && (
                             <>
-                                <a 
+                                <Link 
+                                    to='/bookingDetail'
                                     className="text-primary hover:text-primary/80"  
                                     onClick={handleActionClick} 
                                 >
                                     View/Manage
-                                </a>
+                                </Link>
                                 <span className="text-gray-400 dark:text-gray-600">|</span>
                             </>
                         )}
                         
                         {/* ALWAYS SHOW CANCEL */}
-                        <a 
+                        <button 
                             className="text-red-500 hover:text-red-600" 
                             onClick={handleActionClick} 
                         >
                             Cancel
-                        </a>
+                        </button>
                     </div>
                 ) : (
                     // Action for PAST bookings
-                    <a 
+                    <Link 
+                        to='/bookingDetail'
                         className="text-primary hover:text-primary/80"  
                         onClick={handleActionClick} // ACTION LINK: Must stop propagation
                     >
                         View Details
-                    </a>
+                    </Link>
                 )}
             </td>
         </tr>

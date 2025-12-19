@@ -51,9 +51,8 @@ const DUMMY_BOOKING = {
 };
 
 const BREADCRUMB_PATH = [
-    { label: 'Home', href: '#' },
-    { label: 'Profile', href: '#' },
-    { label: 'Booking History', href: '/bookings' },
+    { label: 'Home', href: '/' },
+    { label: 'Booking History', href: '/bookingHistory' },
 ];
 
 // ===================================================================
@@ -66,7 +65,6 @@ const BookingDetailPage = () => {
     // Current Page Breadcrumb
     const currentPageBreadcrumb = [
         ...BREADCRUMB_PATH,
-        { label: `Booking Details`, href: `/bookings/details/${booking.id}` },
     ];
 
     // Helper component for content cards

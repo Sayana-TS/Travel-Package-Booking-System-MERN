@@ -156,7 +156,7 @@ const PackageDetailPage = () => {
       <UserLayout>
       <div className="container mx-auto p-4 md:p-8">
 
-        <Breadcrumb path={[{ label: 'Home', href: '#' }, { label: 'Packages', href: '#' }]} currentPage={PACKAGE_DATA.title} />
+        <Breadcrumb path={[{ label: 'Home', href: '/' }, { label: 'Packages', href: '#' }]} currentPage={PACKAGE_DATA.title} />
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 

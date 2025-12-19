@@ -1,42 +1,72 @@
-// Updated UserLayout with exact HTML match styling\import React, { useState } from "react";
 import React, { useState } from "react";
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 
 const UserLayout = ({ children }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // Helper to highlight the active link
+  const isActive = (path) => location.pathname === path;
+
+  const handleMobileLinkClick = () => setMobileOpen(false);
+
+  const handleLogout = () => {
+    // Add auth cleanup here
+    navigate('/login');
+  };
 
   return (
     <div className="min-h-screen bg-background-dark font-display text-text-dark flex flex-col">
       <header className="sticky top-0 z-50 bg-background-dark/80 backdrop-blur-sm shadow-md shadow-slate-900/50">
         <div className="w-full px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20">
-            <a href="#" className="text-3xl font-bold text-primary">GlobeGo</a>
+            {/* Logo */}
+            <Link to="/" className="text-3xl font-bold text-primary">GlobeGo</Link>
 
+            {/* Desktop Nav */}
             <nav className="hidden md:flex items-center space-x-8">
-              <a className="text-sm font-medium text-primary" href="#">Home</a>
-              <a className="text-sm font-medium text-subtext-dark hover:text-primary transition-colors" href="#">Packages</a>
-              <a className="text-sm font-medium text-subtext-dark hover:text-primary transition-colors" href="#">Favorites</a>
-              <a className="text-sm font-medium text-subtext-dark hover:text-primary transition-colors" href="#">Bookings</a>
-              <a className="text-sm font-medium text-subtext-dark hover:text-primary transition-colors" href="#">Profile</a>
+              {[
+                { name: 'Home', path: '/' },
+                { name: 'Favorites', path: '/favorites' },
+                { name: 'Bookings', path: '/bookingHistory' },
+                { name: 'Profile', path: '/profile' },
+                { name: 'Contact Us', path: '/contactus' },
+              ].map((link) => (
+                <Link 
+                  key={link.name}
+                  to={link.path}
+                  className={`text-sm font-medium transition-colors ${
+                    isActive(link.path) ? 'text-primary' : 'text-subtext-dark hover:text-primary'
+                  }`}
+                >
+                  {link.name}
+                </Link>
+              ))}
             </nav>
 
+            {/* Right Actions */}
             <div className="flex items-center space-x-4">
-              <button className="p-2 rounded-full hover:bg-card-dark transition-colors">
+              {/* <button className="p-2 rounded-full hover:bg-card-dark transition-colors">
                 <span className="material-icons text-subtext-dark">notifications</span>
-              </button>
+              </button> */}
 
-              <button className="p-2 rounded-full hover:bg-card-dark transition-colors">
+              <Link to="/favorites" className="p-2 rounded-full hover:bg-card-dark transition-colors">
                 <span className="material-icons text-subtext-dark">favorite_border</span>
-              </button>
+              </Link>
 
-              <button className="flex items-center space-x-2">
+              <Link to="/profile" className="flex items-center space-x-2 border-l border-white/10 pl-4">
                 <img
-                  alt="User profile"
-                  className="h-10 w-10 rounded-full object-cover"
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuA8iDfT8GktfwuTIZmupembnW_VIOq8LJV4T3nkTJc2gt-XWNHtlLdjLwkCJrTq9EVS4FKffHtc6PjGqRTUYcgG0bD4BOfPWNcVCHrfE5h7ZNmacdVyP4LLKNSiivfNw4Dw18NMuUTQcYfwkxJvKkuLvJ66RiqEPKLBtvIxBS231K0FYUHY49txjON7hFZyXTZYS0bQo_yAJrcufXosfpztppPlSxy-Nat97d91fntzt13_jenwwOyVQgknTiX1dbf1ySyyMTi72xY"
+                  alt="Profile"
+                  className="h-10 w-10 rounded-full object-cover border-2 border-primary/20"
+                  src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=100&q=80"
                 />
-              </button>
+              </Link>
 
-              <button className="hidden md:inline-block px-4 py-2 text-sm font-medium text-white bg-primary rounded-lg hover:opacity-90 transition-opacity">
+              <button 
+                onClick={handleLogout}
+                className="hidden md:inline-block px-4 py-2 text-sm font-medium text-white bg-primary rounded-lg hover:opacity-90 transition-opacity"
+              >
                 Logout
               </button>
 
@@ -48,27 +78,17 @@ const UserLayout = ({ children }) => {
               </button>
             </div>
           </div>
-
-          <div className="hidden md:flex justify-center items-center py-2 border-t border-white space-x-6 text-sm opacity-50">
-            <a className="text-subtext-dark hover:text-primary transition-colors" href="#">Contact</a>
-            <a className="text-subtext-dark hover:text-primary transition-colors" href="#">About</a>
-          </div>
         </div>
 
+        {/* Mobile Menu */}
         {mobileOpen && (
-          <div className="md:hidden bg-background-dark border-t border-white px-6 py-4 space-y-4">
-            <a className="block text-subtext-dark hover:text-primary transition-colors" href="#">Home</a>
-            <a className="block text-subtext-dark hover:text-primary transition-colors" href="#">Packages</a>
-            <a className="block text-subtext-dark hover:text-primary transition-colors" href="#">Favorites</a>
-            <a className="block text-subtext-dark hover:text-primary transition-colors" href="#">Bookings</a>
-            <a className="block text-subtext-dark hover:text-primary transition-colors" href="#">Profile</a>
-
-            <div className="border-t border-white pt-4 flex justify-between">
-              <a className="text-subtext-dark hover:text-primary transition-colors" href="#">Contact</a>
-              <a className="text-subtext-dark hover:text-primary transition-colors" href="#">About</a>
-            </div>
-
-            <button className="w-full py-2 bg-primary rounded-lg font-medium hover:opacity-90">Logout</button>
+          <div className="md:hidden bg-background-dark border-t border-white/10 px-6 py-4 space-y-4 animate-in slide-in-from-top duration-300">
+            <Link onClick={handleMobileLinkClick} className="block text-subtext-dark hover:text-primary" to="/">Home</Link>
+            <Link onClick={handleMobileLinkClick} className="block text-subtext-dark hover:text-primary" to="/bookingHistory">Bookings</Link>
+            <Link onClick={handleMobileLinkClick} className="block text-subtext-dark hover:text-primary" to="/favorites">Favorites</Link>
+            <Link onClick={handleMobileLinkClick} className="block text-subtext-dark hover:text-primary" to="/profile">Profile</Link>
+            <Link onClick={handleMobileLinkClick} className="block text-subtext-dark hover:text-primary" to="/contactus">Contact Us</Link>
+            <button onClick={handleLogout} className="w-full py-2 bg-primary text-white rounded-lg font-medium">Logout</button>
           </div>
         )}
       </header>

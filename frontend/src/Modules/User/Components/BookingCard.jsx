@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 // Helper function to determine badge style based on status text
 const getStatusBadgeClasses = (status) => {
@@ -74,7 +75,7 @@ const BookingCard = ({ booking, isUpcoming }) => {
                         {/* Action for PENDING bookings */}
                         {!isConfirmed && (
                             <>
-                                <a className="text-primary hover:text-primary/80" href={`/modify-booking/${booking.id}`} onClick={handleActionClick}>Modify</a>
+                                <Link className="text-primary hover:text-primary/80" to='/bookingDetail' onClick={handleActionClick}>Modify</Link>
                                 <span className="text-gray-400 dark:text-gray-600">|</span>
                             </>
                         )}
@@ -82,17 +83,17 @@ const BookingCard = ({ booking, isUpcoming }) => {
                         {/* Action for CONFIRMED bookings */}
                         {isConfirmed && (
                             <>
-                                <a className="text-primary hover:text-primary/80" href={`/bookings/manage/${booking.id}`} onClick={handleActionClick}>View/Manage</a>
+                                <Link className="text-primary hover:text-primary/80" to='/bookingDetail' onClick={handleActionClick}>View/Manage</Link>
                                 <span className="text-gray-400 dark:text-gray-600">|</span>
                             </>
                         )}
 
                         {/* ALWAYS SHOW CANCEL */}
-                        <a className="text-red-500 hover:text-red-600" href={`/cancel-booking/${booking.id}`} onClick={handleActionClick}>Cancel</a>
+                        <button className="text-red-500 hover:text-red-600" href={`/cancel-booking/${booking.id}`} onClick={handleActionClick}>Cancel</button>
                     </>
                 ) : (
                     // Action for PAST bookings
-                    <a className="text-primary hover:text-primary/80" href={`/bookings/details/${booking.id}`} onClick={handleActionClick}>View Details</a>
+                    <Link className="text-primary hover:text-primary/80" to='/bookingDetail' onClick={handleActionClick}>View Details</Link>
                 )}
             </div>
         </div>

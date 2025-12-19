@@ -16,7 +16,7 @@ const MOCK_USER_DATA = {
 };
 
 const BREADCRUMB_PATH = [
-    { label: 'Home', href: '#' },
+    { label: 'Home', href: '/' },
 ];
 
 // ===================================================================

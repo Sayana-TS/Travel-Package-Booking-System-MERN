@@ -4,7 +4,7 @@ import Breadcrumb from '../Components/Breadcrumb';
 
 // --- MOCK DATA ---
 const BREADCRUMB_PATH = [
-    { label: 'Home', href: '#' },
+    { label: 'Home', href: '/' },
 ];
 
 const MOCK_REQUESTS = [
@@ -42,16 +42,30 @@ const MOCK_REQUESTS = [
 // ===================================================================
 
 const ContactForm = () => {
+    const [formData, setFormData] = useState({
+        subject: '',
+        category: '',
+        bookingId: '', // Added Booking ID state
+        description: '',
+    });
+
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.id]: e.target.value });
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
         // Handle form submission logic here (API call, etc.)
-        console.log('Submitting new support ticket...');
+        console.log('Submitting new support ticket with data:', formData);
+        // Add API call here
     };
 
     return (
         <div className="bg-white dark:bg-card-dark rounded-xl p-8 mb-12 shadow-md">
             <h3 className="text-xl font-bold mb-6 text-gray-900 dark:text-white">Submit a Request</h3>
             <form onSubmit={handleSubmit} className="space-y-6">
+                
+                {/* Subject Field */}
                 <div>
                     <label className="block text-sm font-medium mb-2 text-gray-900 dark:text-white" htmlFor="subject">Subject</label>
                     <input 
@@ -59,26 +73,48 @@ const ContactForm = () => {
                         id="subject" 
                         placeholder="e.g., Issue with booking payment" 
                         type="text" 
+                        value={formData.subject}
+                        onChange={handleChange}
+                        required
                     />
                 </div>
+                
+                {/* Category Field */}
                 <div>
                     <label className="block text-sm font-medium mb-2 text-gray-900 dark:text-white" htmlFor="category">Category</label>
-                    {/* Select input custom styling for arrow */}
                     <select 
                         className="w-full bg-background-light dark:bg-background-dark border border-gray-300 dark:border-white/10 rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary focus:border-primary transition-all appearance-none bg-no-repeat bg-right pr-8 text-gray-900 dark:text-white" 
                         id="category" 
+                        value={formData.category}
+                        onChange={handleChange}
+                        required
                         style={{
                             backgroundImage: `url('data:image/svg+xml,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 16 16%27 fill=%27%23056bd1%27%3e%3cpath fill-rule=%27evenodd%27 d=%27M4.22 6.22a.75.75 0 0 1 1.06 0L8 8.94l2.72-2.72a.75.75 0 1 1 1.06 1.06l-3.25 3.25a.75.75 0 0 1-1.06 0L4.22 7.28a.75.75 0 0 1 0-1.06z%27 clip-rule=%27evenodd%27 /%3e%3c/svg%3e')`,
                             backgroundPosition: 'right 0.75rem center'
                         }}
                     >
-                        <option className="text-gray-500 dark:text-gray-400">Select a category</option>
+                        <option value="" disabled className="text-gray-500 dark:text-gray-400">Select a category</option>
                         <option>Booking Inquiry</option>
                         <option>Payment Issue</option>
                         <option>Technical Support</option>
                         <option>General Feedback</option>
                     </select>
                 </div>
+
+                {/* NEW FIELD: Booking ID (Optional) */}
+                <div>
+                    <label className="block text-sm font-medium mb-2 text-gray-900 dark:text-white" htmlFor="bookingId">Booking ID <span className="text-gray-500 dark:text-subtext-dark font-normal">(Optional)</span></label>
+                    <input 
+                        className="w-full bg-background-light dark:bg-background-dark border border-gray-300 dark:border-white/10 rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary focus:border-primary transition-all placeholder:text-gray-500 dark:placeholder:text-subtext-dark text-gray-900 dark:text-white" 
+                        id="bookingId" 
+                        placeholder="e.g., TRK-123456" 
+                        type="text" 
+                        value={formData.bookingId}
+                        onChange={handleChange}
+                    />
+                </div>
+                
+                {/* Description Field */}
                 <div>
                     <label className="block text-sm font-medium mb-2 text-gray-900 dark:text-white" htmlFor="description">Description</label>
                     <textarea 
@@ -86,8 +122,12 @@ const ContactForm = () => {
                         id="description" 
                         placeholder="Please describe your issue in detail..." 
                         rows="5"
+                        value={formData.description}
+                        onChange={handleChange}
+                        required
                     />
                 </div>
+                
                 <div className="flex justify-end pt-2">
                     <button 
                         className="bg-primary text-white font-bold py-3 px-6 rounded-lg hover:opacity-90 transition-opacity shadow-md" 
@@ -102,7 +142,7 @@ const ContactForm = () => {
 };
 
 // ===================================================================
-// Sub-Component 2: RequestAccordionItem
+// Sub-Component 2: RequestAccordionItem (Unchanged)
 // ===================================================================
 
 const getStatusClasses = (status) => {
@@ -128,9 +168,6 @@ const RequestAccordionItem = ({ request }) => {
     };
 
     return (
-        // The original HTML used group-focus-within for the accordion logic. 
-        // In React, using a state variable (isOpen) and standard Tailwind class names is more reliable 
-        // and doesn't rely on focus state for expand/collapse.
         <div className="group bg-white dark:bg-card-dark rounded-xl shadow-sm overflow-hidden border border-gray-100 dark:border-white/5">
             <button 
                 className="w-full text-left p-6 flex items-center justify-between hover:bg-primary/5 dark:hover:bg-primary/10 transition-colors"
@@ -154,7 +191,6 @@ const RequestAccordionItem = ({ request }) => {
             {/* Accordion Content */}
             <div 
                 className={`overflow-hidden transition-all duration-500 ease-in-out ${isOpen ? 'max-h-[1000px]' : 'max-h-0'}`}
-                // The max-h value should be large enough to contain the content
             >
                 <div className="border-t border-gray-200 dark:border-white/10 p-6 space-y-6">
                     <div>
@@ -214,7 +250,7 @@ const RequestAccordionItem = ({ request }) => {
 
 
 // ===================================================================
-// Main Component: ContactUsPage
+// Main Component: ContactUsPage (Unchanged)
 // ===================================================================
 
 const ContactUsPage = () => {

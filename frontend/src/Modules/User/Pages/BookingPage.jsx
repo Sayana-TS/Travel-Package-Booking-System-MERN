@@ -12,9 +12,9 @@ const STATIC_PACKAGE_DATA = {
     pricePerPerson: 1500,
     travelDates: "October 20-28, 2024",
     breadcrumbPath: [
-        { label: 'Home', href: '#' },
+        { label: 'Home', href: '/' },
         { label: 'Packages', href: '#' },
-        { label: 'Mountain Hiking Expedition', href: '#' },
+        { label: 'Mountain Hiking Expedition', href: '/packageDetail' },
     ]
 };
 

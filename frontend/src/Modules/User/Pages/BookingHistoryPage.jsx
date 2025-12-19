@@ -24,8 +24,7 @@ const ALL_BOOKINGS = [
 ];
 
 const BREADCRUMB_PATH = [
-    { label: 'Home', href: '#' },
-    { label: 'Profile', href: '#' },
+    { label: 'Home', href: '/' },
 ];
 
 const AVAILABLE_YEARS = ['All Years', '2024', '2023', '2022'];

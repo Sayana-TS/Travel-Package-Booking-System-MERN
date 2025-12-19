@@ -56,7 +56,7 @@ const RECOMMENDATIONS = [
 ];
 
 const BREADCRUMB_PATH = [
-    { label: 'Home', href: '#' },
+    { label: 'Home', href: '/' },
 ];
 
 // ===================================================================
