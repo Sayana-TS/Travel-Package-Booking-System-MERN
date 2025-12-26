@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo } from 'react'; // 💡 ADDED useMemo
 import UserLayout from '../Layouts/UserLayout'; 
-import Breadcrumb from '../Components/Breadcrumb'; 
+import Breadcrumb from '../../../Shared/Components/Breadcrumb'; 
 import SortDropdown from '../Components/SortDropdown';
 import FavPackageCard from '../Components/FavPackageCard';
 import RecommendationCard from '../Components/RecommendationCard';

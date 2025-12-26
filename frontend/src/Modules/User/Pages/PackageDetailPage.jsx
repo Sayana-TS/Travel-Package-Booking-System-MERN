@@ -1,8 +1,8 @@
 // src/pages/YosemitePackagePage.jsx
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import MaterialIcon from '../Components/MaterialIcon';
 import StarRating from '../Components/StarRating';
-import Breadcrumb from '../Components/Breadcrumb';
+import Breadcrumb from '../../../Shared/Components/Breadcrumb';
 import PackageSummary from '../Components/PackageSummary';
 import HighlightsGrid from '../Components/HighlightsGrid';
 import InclusionsExclusions from '../Components/InclusionsExclusions';
@@ -10,7 +10,7 @@ import ActivityCard from '../Components/ActivityCard';
 import BookingSidebar from '../Components/BookingSidebar';
 import PackageCards from '../Components/PackageCards';
 import UserLayout from '../Layouts/UserLayout'
-
+import { Link } from 'react-router-dom';
 
 // --- Dummy Data (Derived from HTML) ---
 const PACKAGE_DATA = {
@@ -24,11 +24,11 @@ const PACKAGE_DATA = {
     season: "June - Sep"
   },
   gallery: {
-    mainImage: "https://lh3.googleusercontent.com/aida-public/AB6AXuAbHfgAua5tZL8hYWjCL07bOC4OKR5WBc4oEfhjhSsMDJ_yny8pKRtTSeeX1dcFufaZTx_ZLEGLELSgFY7c_VcoZdhE_4__cfngBVTCz6GW3Mr18uO4UXd_22f8mqn_kcSJT8IFjJPkB9zwy0EoKYVlhYq08PGJeBEbiz0VPgvRXWeU1oEWFU1_SujrhiawhyAok-UAOtOInHfNRTzVQibVHR9zYcrbZX71P25TocOy4zfwvLCoiidIeUnIiLZ7XlRxSxEiXKZMDBs",
+    mainImage: "https://images.unsplash.com/photo-1533496199141-bccd9b139773?auto=format&fit=crop&w=1200&q=80",
     thumbnails: [
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuCfguLCzCxAd0CJ8pdpAtmu61ajuA1vRNQeT_gfUO0ltIdD_skxg3oSDQUTJfh0gRE3eT6XN1JZ8LkbwxezVmKoTJDw2vECao-nVN-R_y49k_Vr5CucREhx3JXduUGSP8a8hR5hxU_6cXLupp_mYKq3kq1wrHw2ZccILnXvSCwZfizAkr9g-ejPbrvEt1ralqDen7rh1p7YyrLGvuOqpnZ_INEx_Uxk4qB66j4TtZM371ksprx1CdevF4_a7AmWPqWuhK1TvN5OPBY",
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuB0KXRh1Dypk34TOJyselGL3CHfBl4XWiezQQ3x3kTGJBhGNVzZwxKt4K--btToFhZnGSUNrBghLN8-MWdc8eNm9QsyhGsuecTtqJXYoJtog0F81bw30o8klk8663B5Sq_AY6X0BKgdX9mcGXvoKyOoTk52rOQd6jxW9u8rHn4qMYL6Fmhr8xkGDCO3k_GeBJ9v3RtuZG6srNRKnlPQxxmgDpjeIA-mHA_Bgld-nVGTzufrmXNNSmMWz6plBAOYSdl_KfmRLe7KTTI",
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuCvlyucXZ-L50sCPM6wW8YPU2OBk2endd4utLg3a3y_zHRs7GqtM7VK8HGGcQpgPqfy2MTzp8kw-ayRVclGYsHfNoRLZ68oAPVbhM2tcThi6y2nrq-TAHjSudDxR_CNDO7TWskJoZEI6zN4bfW1A-dYaF-hgw2kREvLqk3tiOS_20HmSXTP4G3K2dDCG5k2HPF7XjS45wHnKHl4DBBfpoV-rCJ0QOauiSsQvn3KqagKFrQesYvWuyTNpu0fWp2QhY4mCXdmWYrSXJk"
+      "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=400&q=80",
+      "https://images.unsplash.com/photo-1505159947324-47d039f193c4?auto=format&fit=crop&w=400&q=80",
+      "https://images.unsplash.com/photo-1498429089284-41f8cf3ffd39?auto=format&fit=crop&w=400&q=80"
     ]
   },
   highlights: [
@@ -60,45 +60,122 @@ const PACKAGE_DATA = {
 
 const PackageDetailPage = () => {
   const [showReviewForm, setShowReviewForm] = useState(false);
-  // --- Hotel Details Section (Inline for simplicity) ---
-  const HotelDetails = () => (
-    <section className="bg-card-light dark:bg-card-dark p-6 rounded-lg">
-      <h3 className="text-2xl font-bold mb-4">Hotel Details: Cozy Mountain Lodge</h3>
-      <p className="text-subtext-dark mb-4">Nestled in the heart of Yosemite, offering stunning views and world-class amenities. Enjoy comfort and nature at your doorstep.</p>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div>
-          {/* Main Hotel Image */}
-          <div className="relative group">
-            <img alt="A cozy hotel room with a made bed" className="w-full h-48 object-cover rounded-lg" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCvlyucXZ-L50sCPM6wW8YPU2OBk2endd4utLg3a3y_zHRs7GqtM7VK8HGGcQpgPqfy2MTzp8kw-ayRVclGYsHfNoRLZ68oAPVbhM2tcThi6y2nrq-TAHjSudDxR_CNDO7TWskJoZEI6zN4bfW1A-dYaF-hgw2kREvLqk3tiOS_20HmSXTP4G3K2dDCG5k2HPF7XjS45wHnKHl4DBBfpoV-rCJ0QOauiSsQvn3KqagKFrQesYvWuyTNpu0fWp2QhY4mCXdmWYrSXJk" />
-            <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-all duration-300 flex items-center justify-between px-2">
-              <button className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300"><MaterialIcon name="arrow_back_ios" className="text-4xl" /></button>
-              <button className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300"><MaterialIcon name="arrow_forward_ios" className="text-4xl" /></button>
+  
+  // --- Carousel State & Logic ---
+  const [activeImgIndex, setActiveImgIndex] = useState(0);
+  const allImages = [PACKAGE_DATA.gallery.mainImage, ...PACKAGE_DATA.gallery.thumbnails];
+
+  const handleNext = () => {
+    setActiveImgIndex((prev) => (prev === allImages.length - 1 ? 0 : prev + 1));
+  };
+
+  const handlePrev = () => {
+    setActiveImgIndex((prev) => (prev === 0 ? allImages.length - 1 : prev - 1));
+  };
+
+  // --- Hotel Details Section ---
+  const HotelDetails = () => {
+    const hotelImages = PACKAGE_DATA.gallery.thumbnails;
+    // Use index instead of the string URL for easier navigation logic
+    const [hotelIdx, setHotelIdx] = useState(0);
+  
+    const nextHotelImg = () => {
+      setHotelIdx((prev) => (prev === hotelImages.length - 1 ? 0 : prev + 1));
+    };
+  
+    const prevHotelImg = () => {
+      setHotelIdx((prev) => (prev === 0 ? hotelImages.length - 1 : prev - 1));
+    };
+  
+    return (
+      <section className="bg-card-light dark:bg-card-dark p-6 rounded-lg border border-white/5">
+        <h3 className="text-2xl font-bold mb-4 text-white">Hotel Details: Cozy Mountain Lodge</h3>
+        <p className="text-subtext-dark mb-4">
+          Nestled in the heart of Yosemite, offering stunning views and world-class amenities. 
+          Enjoy comfort and nature at your doorstep.
+        </p>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            {/* Main Hotel Image Carousel */}
+            <div className="relative group overflow-hidden rounded-lg bg-gray-800">
+              <img 
+                alt="A cozy hotel room" 
+                className="w-full h-64 object-cover transition-all duration-500" 
+                src={hotelImages[hotelIdx]} 
+              />
+              
+              {/* Interactive Overlay & Buttons */}
+              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-between px-2">
+                <button 
+                  onClick={prevHotelImg}
+                  className="text-white p-2 hover:bg-primary rounded-full transition-colors"
+                >
+                  <MaterialIcon name="arrow_back_ios" className="text-3xl translate-x-1" />
+                </button>
+                <button 
+                  onClick={nextHotelImg}
+                  className="text-white p-2 hover:bg-primary rounded-full transition-colors"
+                >
+                  <MaterialIcon name="arrow_forward_ios" className="text-3xl" />
+                </button>
+              </div>
+              
+              {/* Image Counter Badge */}
+              <div className="absolute bottom-2 right-2 bg-black/60 px-2 py-1 rounded text-xs text-white">
+                {hotelIdx + 1} / {hotelImages.length}
+              </div>
+            </div>
+  
+            {/* Thumbnails */}
+            <div className="flex space-x-2 mt-2">
+              {hotelImages.map((src, index) => (
+                <div 
+                  key={index}
+                  className={`relative w-1/3 h-16 cursor-pointer rounded-md overflow-hidden transition-all ${
+                    hotelIdx === index ? 'ring-2 ring-primary ring-offset-2 ring-offset-black' : 'opacity-50 hover:opacity-100'
+                  }`}
+                  onClick={() => setHotelIdx(index)}
+                >
+                  <img 
+                    alt={`Hotel thumbnail ${index + 1}`} 
+                    className="w-full h-full object-cover" 
+                    src={src} 
+                  />
+                </div>
+              ))}
             </div>
           </div>
-          {/* Thumbnails */}
-          <div className="flex space-x-2 mt-2">
-            {PACKAGE_DATA.gallery.thumbnails.map((src, index) => (
-              <img key={index} alt={`Hotel thumbnail ${index + 1}`} className={`w-1/3 h-16 object-cover rounded-md cursor-pointer ${index === 0 ? 'border-2 border-primary' : ''}`} src={src} />
-            ))}
+  
+          {/* Amenities & Room Details */}
+          <div className="flex flex-col justify-between">
+            <div>
+              <h4 className="text-xl font-semibold mb-3 text-white">Amenities</h4>
+              <div className="grid grid-cols-2 gap-3 text-sm mb-6">
+                {['wifi', 'pool', 'local_parking', 'restaurant', 'fitness_center', 'spa'].map((icon, index) => (
+                  <span key={index} className="flex items-center text-gray-300">
+                    <MaterialIcon name={icon} className="text-primary mr-2 text-lg" />
+                    {icon.charAt(0).toUpperCase() + icon.slice(1).replace('_', ' ')}
+                  </span>
+                ))}
+              </div>
+            </div>
+            
+            <div className="bg-white/5 p-4 rounded-lg">
+              <h4 className="text-lg font-semibold mb-2 text-white flex items-center">
+                <MaterialIcon name="king_bed" className="mr-2 text-primary" />
+                Room Details
+              </h4>
+              <p className="text-sm text-subtext-dark leading-relaxed">
+                Standard rooms with double beds, mountain-view balconies, and climate control. 
+                Options to upgrade to Deluxe or Suite available.
+              </p>
+            </div>
           </div>
         </div>
-        {/* Amenities */}
-        <div>
-          <h4 className="text-xl font-semibold mb-3">Amenities</h4>
-          <div className="grid grid-cols-2 gap-3 text-sm mb-4">
-            {['wifi', 'pool', 'local_parking', 'restaurant', 'fitness_center', 'spa'].map((icon, index) => (
-              <span key={index} className="flex items-center">
-                <MaterialIcon name={icon} className="text-primary mr-2" />
-                {icon.charAt(0).toUpperCase() + icon.slice(1).replace('_', ' ')}
-              </span>
-            ))}
-          </div>
-          <h4 className="text-xl font-semibold mb-3">Room Details</h4>
-          <p className="text-sm text-subtext-dark">Standard rooms with double beds. Options to upgrade to Deluxe or Suite available.</p>
-        </div>
-      </div>
-    </section>
-  );
+      </section>
+    );
+  };
 
   // --- Itinerary Section (Inline for simplicity) ---
   const ItineraryAccordion = () => {
@@ -144,8 +221,8 @@ const PackageDetailPage = () => {
           <p className="text-sm text-subtext-dark mt-2">5+ years organizing Kerala backwater and hill station trips.</p>
         </div>
         <div className="flex flex-col space-y-2 w-full sm:w-auto">
-          <button className="bg-primary text-white font-bold py-2 px-6 rounded-lg hover:bg-primary/90 transition-colors">Contact Agent</button>
-          <a className="text-center text-primary text-sm font-medium hover:underline" href="#">View All Packages</a>
+          <Link to='/profileHost' className="bg-primary text-white text-center font-bold py-2 px-6 rounded-lg hover:bg-primary/90 transition-colors">Contact Agent</Link>
+          <Link className="text-center text-primary text-sm font-medium hover:underline" to="/profileHost">View All Packages</Link>
         </div>
       </div>
     </section>
@@ -154,173 +231,187 @@ const PackageDetailPage = () => {
   return (
     <div className='min-h-screen bg-background-dark text-white'>
       <UserLayout>
-      <div className="container mx-auto p-4 md:p-8">
+        <div className="container mx-auto p-4 md:p-8">
 
-        <Breadcrumb path={[{ label: 'Home', href: '/' }, { label: 'Packages', href: '#' }]} currentPage={PACKAGE_DATA.title} />
+          <Breadcrumb path={[{ label: 'Home', href: '/' }, { label: 'Packages', href: '#' }]} currentPage={PACKAGE_DATA.title} />
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
-          {/* === Left Column (Main Content) === */}
-          <div className="lg:col-span-2 space-y-8">
+            {/* === Left Column (Main Content) === */}
+            <div className="lg:col-span-2 space-y-8">
 
-            {/* Package Gallery & Summary */}
-            <section>
-              {/* Gallery */}
-              <div className="relative">
-                <img
-                  alt="A stunning view of Yosemite National Park with El Capitan and Half Dome"
-                  className="w-full h-[500px] object-cover rounded-lg mb-6"
-                  src={PACKAGE_DATA.gallery.mainImage}
-                />
-                <div className="absolute top-4 right-4 bg-red-500 text-white text-sm font-bold px-3 py-1 rounded-full">20% OFF</div>
-                <div className="absolute bottom-10 left-0 right-0 flex justify-center space-x-2">
-                  {[...Array(3)].map((_, i) => (
-                    <button key={i} className={`w-2 h-2 bg-white rounded-full ${i === 1 ? 'opacity-100' : 'opacity-50 hover:opacity-100 focus:opacity-100'}`}></button>
-                  ))}
-                </div>
-              </div>
+              {/* Package Gallery & Summary */}
+              <section>
+                {/* Updated Hero Gallery Carousel */}
+                <div className="relative group overflow-hidden rounded-lg mb-6">
+                  <img
+                    alt="Yosemite Gallery Image"
+                    className="w-full h-[500px] object-cover transition-transform duration-500 ease-in-out"
+                    src={allImages[activeImgIndex]}
+                  />
+                  
+                  {/* Arrows */}
+                  <div className="absolute inset-0 flex items-center justify-between px-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <button 
+                      onClick={handlePrev}
+                      className="p-2 bg-black/40 hover:bg-primary text-white rounded-full transition-colors"
+                    >
+                      <MaterialIcon name="arrow_back_ios" className="translate-x-1" />
+                    </button>
+                    <button 
+                      onClick={handleNext}
+                      className="p-2 bg-black/40 hover:bg-primary text-white rounded-full transition-colors"
+                    >
+                      <MaterialIcon name="arrow_forward_ios" />
+                    </button>
+                  </div>
 
-              {/* Summary */}
-              <PackageSummary
-                title={PACKAGE_DATA.title}
-                duration={PACKAGE_DATA.details.duration}
-                location={PACKAGE_DATA.details.location}
-                season={PACKAGE_DATA.details.season}
-                price={PACKAGE_DATA.price.toLocaleString()}
-                rating={PACKAGE_DATA.rating}
-                reviewCount={PACKAGE_DATA.reviewCount}
-              />
-            </section>
-
-            <HighlightsGrid highlights={PACKAGE_DATA.highlights} />
-
-            <InclusionsExclusions
-              inclusions={[
-                "4 nights accommodation at Cozy Mountain Lodge.",
-                "Daily breakfast and welcome dinner.",
-                "All activities mentioned in the itinerary.",
-                "Airport transfers and park transportation.",
-                "Experienced tour guide.",
-              ]}
-              exclusions={[
-                "Airfare to/from Fresno (FAT).",
-                "Lunches and dinners (except welcome dinner).",
-                "Optional activities and personal expenses.",
-                "Travel insurance.",
-              ]}
-            />
-
-            <section className="bg-card-light dark:bg-card-dark p-6 rounded-lg">
-              <h3 className="text-2xl font-bold mb-4">Activities / Tours Included</h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {PACKAGE_DATA.activities.map((activity, index) => (
-                  <ActivityCard key={index} {...activity} />
-                ))}
-              </div>
-            </section>
-
-            <HotelDetails />
-
-            <ItineraryAccordion />
-
-            {/* Location & Weather */}
-            <section className="bg-card-light dark:bg-card-dark p-6 rounded-lg">
-              <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
-                {/* Location */}
-                <div className="md:col-span-3">
-                  <h3 className="text-2xl font-bold mb-4">Location Overview</h3>
-                  <p className="text-subtext-dark mb-4">Yosemite National Park, California’s Sierra Nevada jewel, is renowned for its giant sequoias and iconic vistas like Tunnel View, Bridalveil Fall, El Capitan, and Half Dome.</p>
-                  <img alt="A stylized map showing mountains and a book" className="w-full h-64 object-cover rounded-lg shadow-md" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCm8zzgdyEh3625Gs1DQwMQUjeBvl5v2m2OChMuYX6YdvoUK7F3gfon-LgsTeof4zxDUVAUc8GIQ3jMPVIJBB4HNOYPcM3znFpIk--bzcGU2__ljrgpzXgod6B3eCmRK0m8PZrWQYcGVHNvK24EW3MmFH0_XZP9BgZqtsSVj6TDASToofD3LaqsTQdToo__cHrfaG6atiM4mnwcdL0hBPvIeKvJOTR1W-gF2M4bCbNVjRPRJVPjYeeZpnkMQf7Iw2v_rdnP_ZKAfE0" />
-                </div>
-                {/* Weather */}
-                <div className="md:col-span-2">
-                  <h3 className="text-2xl font-bold mb-4">Weather Forecast</h3>
-                  <div className="space-y-3">
-                    {/* Weather Items */}
-                    {[
-                      { day: 'Mon', icon: 'wb_sunny', color: 'text-yellow-500', condition: 'Sunny', temps: '75°F / 55°F' },
-                      { day: 'Tue', icon: 'cloud', color: 'text-blue-400', condition: 'Cloudy', temps: '72°F / 52°F' },
-                      { day: 'Wed', icon: 'grain', color: 'text-gray-400', condition: 'Rainy', temps: '70°F / 50°F' },
-                      { day: 'Thu', icon: 'wb_sunny', color: 'text-yellow-500', condition: 'Sunny', temps: '78°F / 58°F' },
-                      { day: 'Fri', icon: 'wb_sunny', color: 'text-yellow-500', condition: 'Sunny', temps: '79°F / 59°F' },
-                    ].map((w, index) => (
-                      <div key={index} className="flex items-center justify-between bg-background-light dark:bg-background-dark p-3 rounded-lg">
-                        <span className="font-semibold w-12">{w.day}</span>
-                        <div className="flex items-center space-x-2">
-                          <MaterialIcon name={w.icon} className={`${w.color} text-3xl`} />
-                          <span className="text-sm">{w.condition}</span>
-                        </div>
-                        <span className="font-semibold text-sm">{w.temps}</span>
-                      </div>
+                  <div className="absolute top-4 right-4 bg-red-500 text-white text-sm font-bold px-3 py-1 rounded-full">20% OFF</div>
+                  
+                  {/* Indicators / Dots */}
+                  <div className="absolute bottom-6 left-0 right-0 flex justify-center space-x-2">
+                    {allImages.map((_, i) => (
+                      <button 
+                        key={i} 
+                        onClick={() => setActiveImgIndex(i)}
+                        className={`w-2.5 h-2.5 rounded-full transition-all ${i === activeImgIndex ? 'bg-primary w-6' : 'bg-white/50'}`}
+                      ></button>
                     ))}
                   </div>
                 </div>
-              </div>
-            </section>
 
-            {/* Reviews */}
-            <section className="bg-card-light dark:bg-card-dark p-6 rounded-lg">
-              <h3 className="text-2xl font-bold mb-4">Reviews & Ratings</h3>
-              <div className="flex items-center mb-6">
-                <p className="text-4xl font-bold mr-4">{PACKAGE_DATA.rating.toFixed(1)}</p>
-                <div>
-                  <StarRating rating={PACKAGE_DATA.rating} />
-                  <p className="text-sm text-subtext-dark">Based on {PACKAGE_DATA.reviewCount} reviews</p>
+                {/* Summary */}
+                <PackageSummary
+                  title={PACKAGE_DATA.title}
+                  duration={PACKAGE_DATA.details.duration}
+                  location={PACKAGE_DATA.details.location}
+                  season={PACKAGE_DATA.details.season}
+                  price={PACKAGE_DATA.price.toLocaleString()}
+                  rating={PACKAGE_DATA.rating}
+                  reviewCount={PACKAGE_DATA.reviewCount}
+                />
+              </section>
+
+              <HighlightsGrid highlights={PACKAGE_DATA.highlights} />
+
+              <InclusionsExclusions
+                inclusions={[
+                  "4 nights accommodation at Cozy Mountain Lodge.",
+                  "Daily breakfast and welcome dinner.",
+                  "All activities mentioned in the itinerary.",
+                  "Airport transfers and park transportation.",
+                  "Experienced tour guide.",
+                ]}
+                exclusions={[
+                  "Airfare to/from Fresno (FAT).",
+                  "Lunches and dinners (except welcome dinner).",
+                  "Optional activities and personal expenses.",
+                  "Travel insurance.",
+                ]}
+              />
+
+              <section className="bg-card-light dark:bg-card-dark p-6 rounded-lg">
+                <h3 className="text-2xl font-bold mb-4">Activities / Tours Included</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {PACKAGE_DATA.activities.map((activity, index) => (
+                    <ActivityCard key={index} {...activity} />
+                  ))}
                 </div>
-              </div>
-              <div className="border-t border-gray-200 dark:border-border-dark pt-6 space-y-6">
-                {PACKAGE_DATA.reviews.map((review, index) => (
-                  <div key={index} className="flex items-start space-x-4">
-                    <img alt={`Avatar of ${review.name}`} className="w-12 h-12 rounded-full object-cover" src={review.avatar} />
-                    <div>
-                      <p className="font-semibold">{review.name}</p>
-                      <StarRating rating={review.rating} size="sm" />
-                      <p className="text-subtext-dark">{review.text}</p>
+              </section>
+
+              <HotelDetails />
+
+              <ItineraryAccordion />
+
+              {/* Location & Weather */}
+              <section className="bg-card-light dark:bg-card-dark p-6 rounded-lg">
+                <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
+                  {/* Location */}
+                  <div className="md:col-span-3">
+                    <h3 className="text-2xl font-bold mb-4">Location Overview</h3>
+                    <p className="text-subtext-dark mb-4">Yosemite National Park, California’s Sierra Nevada jewel, is renowned for its giant sequoias and iconic vistas like Tunnel View, Bridalveil Fall, El Capitan, and Half Dome.</p>
+                    <img alt="A stylized map showing mountains and a book" className="w-full h-64 object-cover rounded-lg shadow-md" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCm8zzgdyEh3625Gs1DQwMQUjeBvl5v2m2OChMuYX6YdvoUK7F3gfon-LgsTeof4zxDUVAUc8GIQ3jMPVIJBB4HNOYPcM3znFpIk--bzcGU2__ljrgpzXgod6B3eCmRK0m8PZrWQYcGVHNvK24EW3MmFH0_XZP9BgZqtsSVj6TDASToofD3LaqsTQdToo__cHrfaG6atiM4mnwcdL0hBPvIeKvJOTR1W-gF2M4bCbNVjRPRJVPjYeeZpnkMQf7Iw2v_rdnP_ZKAfE0" />
+                  </div>
+                  {/* Weather */}
+                  <div className="md:col-span-2">
+                    <h3 className="text-2xl font-bold mb-4">Weather Forecast</h3>
+                    <div className="space-y-3">
+                      {/* Weather Items */}
+                      {[
+                        { day: 'Mon', icon: 'wb_sunny', color: 'text-yellow-500', condition: 'Sunny', temps: '75°F / 55°F' },
+                        { day: 'Tue', icon: 'cloud', color: 'text-blue-400', condition: 'Cloudy', temps: '72°F / 52°F' },
+                        { day: 'Wed', icon: 'grain', color: 'text-gray-400', condition: 'Rainy', temps: '70°F / 50°F' },
+                        { day: 'Thu', icon: 'wb_sunny', color: 'text-yellow-500', condition: 'Sunny', temps: '78°F / 58°F' },
+                        { day: 'Fri', icon: 'wb_sunny', color: 'text-yellow-500', condition: 'Sunny', temps: '79°F / 59°F' },
+                      ].map((w, index) => (
+                        <div key={index} className="flex items-center justify-between bg-background-light dark:bg-background-dark p-3 rounded-lg">
+                          <span className="font-semibold w-12">{w.day}</span>
+                          <div className="flex items-center space-x-2">
+                            <MaterialIcon name={w.icon} className={`${w.color} text-3xl`} />
+                            <span className="text-sm">{w.condition}</span>
+                          </div>
+                          <span className="font-semibold text-sm">{w.temps}</span>
+                        </div>
+                      ))}
                     </div>
                   </div>
-                ))}
-                {/* Button to toggle the form visibility */}
-                                <button 
+                </div>
+              </section>
+
+              {/* Reviews */}
+              <section className="bg-card-light dark:bg-card-dark p-6 rounded-lg">
+                <h3 className="text-2xl font-bold mb-4">Reviews & Ratings</h3>
+                <div className="flex items-center mb-6">
+                  <p className="text-4xl font-bold mr-4">{PACKAGE_DATA.rating.toFixed(1)}</p>
+                  <div>
+                    <StarRating rating={PACKAGE_DATA.rating} />
+                    <p className="text-sm text-subtext-dark">Based on {PACKAGE_DATA.reviewCount} reviews</p>
+                  </div>
+                </div>
+                <div className="border-t border-gray-200 dark:border-border-dark pt-6 space-y-6">
+                  {PACKAGE_DATA.reviews.map((review, index) => (
+                    <div key={index} className="flex items-start space-x-4">
+                      <img alt={`Avatar of ${review.name}`} className="w-12 h-12 rounded-full object-cover" src={review.avatar} />
+                      <div>
+                        <p className="font-semibold">{review.name}</p>
+                        <StarRating rating={review.rating} size="sm" />
+                        <p className="text-subtext-dark">{review.text}</p>
+                      </div>
+                    </div>
+                  ))}
+                  <button 
                     className="w-full mt-6 bg-primary/20 text-primary hover:bg-primary hover:text-white font-bold py-2 px-4 rounded-lg transition-colors"
                     onClick={() => setShowReviewForm(prev => !prev)}
-                >
-                    {/* Change button text based on state */}
+                  >
                     {showReviewForm ? "Cancel Submission" : "Submit Your Review"}
-                </button>
+                  </button>
 
-                {/* Conditional Review Form */}
-                {showReviewForm && (
+                  {showReviewForm && (
                     <div className="mt-6 border border-primary/30 p-4 rounded-lg bg-background-light dark:bg-background-dark">
                         <h4 className="font-semibold mb-3">Share Your Experience</h4>
                         <div className="flex items-start space-x-3">
                             <div className="flex-shrink-0">
-                                {/* Using a placeholder avatar for the reviewer */}
                                 <img alt="Your avatar" className="w-10 h-10 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBvrlwqCjrlzqS7F_ybxRTku1r7XVLpt5FkQQnYVE2YrsGh0ELhX7GsQGqpmp-ijY9kdIbwmqaJoS6hjeKTwLRETIW2lwEJPLrX9OqO0DWJ8dFT8-IjkyOabq2HdTMIY30BsI7s4fCl72zEGbeNHUKHoqMTlg80jQh11H6LuRuW8puFYy7f75aVKq6eKxvGZE3tZ5Z4C5Srxq49HJD37Bar5lRKzzCMekIUppdnAfM_o7YAv62gnR_nlAfUNWN7zt7H-aPUIHRAdE4" />
                             </div>
                             <div className="flex-grow">
                                 <form className="space-y-3" onSubmit={(e) => e.preventDefault()}>
-                                    {/* Rating Input */}
                                     <div>
                                         <label className="text-sm font-medium block mb-1 text-text-light dark:text-white">Your Rating:</label>
-                                        {/* Dummy Rating Selection */}
                                         <div className="flex items-center space-x-1 text-yellow-500">
                                             {[...Array(5)].map((_, i) => (
                                                 <MaterialIcon key={i} name="star" className="cursor-pointer text-2xl hover:text-yellow-400" />
                                             ))}
                                         </div>
                                     </div>
-                                    {/* Review Textarea */}
                                     <textarea 
                                         className="w-full bg-background-light dark:bg-background-dark border border-gray-300 dark:border-border-dark rounded-lg p-3 focus:ring-primary focus:border-primary transition-colors text-text-light dark:text-white" 
                                         placeholder="Write your detailed review here..." 
                                         rows="5"
                                     ></textarea>
-                                    
                                     <div className="flex justify-end">
                                         <button 
                                             className="bg-primary text-white font-bold py-2 px-6 rounded-lg hover:bg-primary/90 transition-colors" 
                                             type="submit"
-                                            // In a real app, this would submit data. For now, it hides the form.
                                             onClick={() => setShowReviewForm(false)}
                                         >
                                             Post Review
@@ -330,72 +421,72 @@ const PackageDetailPage = () => {
                             </div>
                         </div>
                     </div>
-                )}
-              </div>
-            </section>
+                  )}
+                </div>
+              </section>
 
-            {/* Q&A */}
-            <section className="bg-card-light dark:bg-card-dark p-6 rounded-lg">
-              <h3 className="text-2xl font-bold mb-6">Customer Q&A</h3>
-              <div className="space-y-6">
-                {PACKAGE_DATA.qna.map((item, index) => (
-                  <div key={index} className="bg-background-light dark:bg-background-dark p-4 rounded-lg">
+              {/* Q&A */}
+              <section className="bg-card-light dark:bg-card-dark p-6 rounded-lg">
+                <h3 className="text-2xl font-bold mb-6">Customer Q&A</h3>
+                <div className="space-y-6">
+                  {PACKAGE_DATA.qna.map((item, index) => (
+                    <div key={index} className="bg-background-light dark:bg-background-dark p-4 rounded-lg">
+                      <div className="flex items-start space-x-3">
+                        <div className="flex-shrink-0">
+                          <img alt="User avatar" className="w-8 h-8 rounded-full" src={item.avatar} />
+                        </div>
+                        <div className="flex-grow">
+                          <p className="font-semibold">{item.question}</p>
+                          <p className="text-sm text-subtext-dark mt-1">{item.answer}</p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                  <div className="mt-6">
+                    <h4 className="font-semibold mb-3">Ask a Question</h4>
                     <div className="flex items-start space-x-3">
                       <div className="flex-shrink-0">
-                        <img alt="User avatar" className="w-8 h-8 rounded-full" src={item.avatar} />
+                        <img alt="Your avatar" className="w-10 h-10 rounded-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBvrlwqCjrlzqS7F_ybxRTku1r7XVLpt5FkQQnYVE2YrsGh0ELhX7GsQGqpmp-ijY9kdIbwmqaJoS6hjeKTwLRETIW2lwEJPLrX9OqO0DWJ8dFT8-IjkyOabq2HdTMIY30BsI7s4fCl72zEGbeNHUKHoqMTlg80jQh11H6LuRuW8puFYy7f75aVKq6eKxvGZE3tZ5Z4C5Srxq49HJD37Bar5lRKzzCMekIUppdnAfM_o7YAv62gnR_nlAfUNWN7zt7H-aPUIHRAdE4" />
                       </div>
                       <div className="flex-grow">
-                        <p className="font-semibold">{item.question}</p>
-                        <p className="text-sm text-subtext-dark mt-1">{item.answer}</p>
+                        <form>
+                          <textarea className="w-full bg-background-light dark:bg-background-dark border border-gray-300 dark:border-border-dark rounded-lg p-3 focus:ring-primary focus:border-primary transition-colors" placeholder="Type your question here..." rows="3"></textarea>
+                          <div className="flex justify-end mt-2">
+                            <button className="bg-primary text-white font-bold py-2 px-6 rounded-lg hover:bg-primary/90 transition-colors" type="submit">Submit</button>
+                          </div>
+                        </form>
                       </div>
-                    </div>
-                  </div>
-                ))}
-                <div className="mt-6">
-                  <h4 className="font-semibold mb-3">Ask a Question</h4>
-                  <div className="flex items-start space-x-3">
-                    <div className="flex-shrink-0">
-                      <img alt="Your avatar" className="w-10 h-10 rounded-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBvrlwqCjrlzqS7F_ybxRTku1r7XVLpt5FkQQnYVE2YrsGh0ELhX7GsQGqpmp-ijY9kdIbwmqaJoS6hjeKTwLRETIW2lwEJPLrX9OqO0DWJ8dFT8-IjkyOabq2HdTMIY30BsI7s4fCl72zEGbeNHUKHoqMTlg80jQh11H6LuRuW8puFYy7f75aVKq6eKxvGZE3tZ5Z4C5Srxq49HJD37Bar5lRKzzCMekIUppdnAfM_o7YAv62gnR_nlAfUNWN7zt7H-aPUIHRAdE4" />
-                    </div>
-                    <div className="flex-grow">
-                      <form>
-                        <textarea className="w-full bg-background-light dark:bg-background-dark border border-gray-300 dark:border-border-dark rounded-lg p-3 focus:ring-primary focus:border-primary transition-colors" placeholder="Type your question here..." rows="3"></textarea>
-                        <div className="flex justify-end mt-2">
-                          <button className="bg-primary text-white font-bold py-2 px-6 rounded-lg hover:bg-primary/90 transition-colors" type="submit">Submit</button>
-                        </div>
-                      </form>
                     </div>
                   </div>
                 </div>
-              </div>
-            </section>
+              </section>
 
-            <HostedByAgent />
+              <HostedByAgent />
+            </div>
+
+            {/* === Right Column (Sidebar) === */}
+            <div className="lg:col-span-1">
+              <BookingSidebar
+                price={PACKAGE_DATA.price.toLocaleString()}
+                rating={PACKAGE_DATA.rating}
+                reviewCount={PACKAGE_DATA.reviewCount}
+              />
+            </div>
+
+            {/* === Full Width Bottom Section (Similar Packages) === */}
+            <div className="lg:col-span-3 w-full mt-8">
+              <section className="bg-card-light dark:bg-card-dark p-6 rounded-lg">
+                <h3 className="text-2xl font-bold mb-6">Similar / Recommended Packages</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                  {PACKAGE_DATA.similarPackages.map((pkg, index) => (
+                    <PackageCards key={index} {...pkg} />
+                  ))}
+                </div>
+              </section>
+            </div>
+
           </div>
-
-          {/* === Right Column (Sidebar) === */}
-          <div className="lg:col-span-1">
-            <BookingSidebar
-              price={PACKAGE_DATA.price.toLocaleString()}
-              rating={PACKAGE_DATA.rating}
-              reviewCount={PACKAGE_DATA.reviewCount}
-            />
-          </div>
-
-          {/* === Full Width Bottom Section (Similar Packages) === */}
-          <div className="lg:col-span-3 w-full mt-8">
-            <section className="bg-card-light dark:bg-card-dark p-6 rounded-lg">
-              <h3 className="text-2xl font-bold mb-6">Similar / Recommended Packages</h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                {PACKAGE_DATA.similarPackages.map((pkg, index) => (
-                  <PackageCards key={index} {...pkg} />
-                ))}
-              </div>
-            </section>
-          </div>
-
         </div>
-      </div>
       </UserLayout>
     </div>
   );

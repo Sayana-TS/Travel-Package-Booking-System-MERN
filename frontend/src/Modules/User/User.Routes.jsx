@@ -1,5 +1,5 @@
 import { Route } from "react-router-dom";
-import AuthPage from "./Pages/AuthPage";
+import AuthPage from "../../Shared/Pages/AuthPage";
 import UserHomePage from "./Pages/UserHomePage";
 import PackagesPage from "./Pages/PackagesPage";
 import PackageDetailPage from "./Pages/PackageDetailPage";
@@ -15,6 +15,8 @@ import HostProfilePage from "./Pages/HostProfilePage";
 export const userRoutes = (
   <>
     <Route path="/login" element={<AuthPage />} />
+    <Route path="/agent/login" element={<AuthPage role="agent"/>} />
+    <Route path="/admin/login" element={<AuthPage role="admin"/>} />
     <Route path="/register" element={<AuthPage />} />
     <Route path="/" element={<UserHomePage />} />
     <Route path="/packages" element={<PackagesPage />} />

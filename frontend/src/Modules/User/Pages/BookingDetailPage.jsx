@@ -1,6 +1,6 @@
 import React from 'react';
 import UserLayout from '../Layouts/UserLayout'; // Assuming existence
-import Breadcrumb from '../Components/Breadcrumb'; // Assuming existence
+import Breadcrumb from '../../../Shared/Components/Breadcrumb'; // Assuming existence
 import BookingHeaderCard from '../Components/BookingHeaderCard';
 import PriceBreakdownCard from '../Components/PriceBreakdownCard';
 import ReviewCard from '../Components/ReviewCard';

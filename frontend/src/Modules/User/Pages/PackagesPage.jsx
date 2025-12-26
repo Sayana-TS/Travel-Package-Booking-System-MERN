@@ -14,12 +14,14 @@ import {
 
 const PackagesPage = () => {
   const location = useLocation();
+  const navigate = useNavigate();
 
   // -----------------------
   // States
   // -----------------------
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedCategory, setSelectedCategory] = useState("All");
 
   const [filters, setFilters] = useState({
     destination: "",
@@ -30,10 +32,8 @@ const PackagesPage = () => {
     price: [500, 2000],
   });
 
-  const navigate = useNavigate()
-
   // -----------------------
-  // Load query params from URL
+  // Load query params from URL (including Category)
   // -----------------------
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -44,8 +44,12 @@ const PackagesPage = () => {
     const qTravelers = params.get("travelers") || "";
     const qDate = params.get("date") || "";
     const qPrice = params.get("price") || "";
+    
+    // NEW: Capture category from URL
+    const qCategory = params.get("category") || "All";
 
     if (qSearch) setSearch(qSearch);
+    setSelectedCategory(qCategory);
 
     setFilters((prev) => ({
       ...prev,
@@ -69,6 +73,8 @@ const PackagesPage = () => {
 
   const handleClear = () => {
     setSearch("");
+    // Clear URL params and reset local state
+    navigate("/packages"); 
     setFilters({
       destination: "",
       travelDates: "",
@@ -93,7 +99,7 @@ const PackagesPage = () => {
       ...budgetFriendly,
     ];
 
-    // Convert price string → number
+    // Data Sanitization: Convert price string → number
     allPackages = allPackages.map((pkg) => {
       let numPrice = 0;
       if (typeof pkg.price === "string") {
@@ -105,7 +111,14 @@ const PackagesPage = () => {
       return { ...pkg, numericPrice: numPrice };
     });
 
-    // Search filter
+    // 1. URL Category Filter
+    if (selectedCategory !== "All") {
+      allPackages = allPackages.filter((pkg) => 
+        pkg.category === selectedCategory || pkg.type === selectedCategory
+      );
+    }
+
+    // 2. Search filter
     if (search.trim()) {
       allPackages = allPackages.filter((pkg) =>
         pkg.title.toLowerCase().includes(search.toLowerCase())
@@ -113,27 +126,27 @@ const PackagesPage = () => {
     }
 
     // Destination filter
-    if (filters.destination) {
-      allPackages = allPackages.filter(
-        (pkg) =>
-          pkg.destination.toLowerCase() ===
-          filters.destination.toLowerCase()
-      );
-    }
+if (filters.destination) {
+  allPackages = allPackages.filter(
+    (pkg) =>
+      pkg.destination?.toLowerCase() === 
+      filters.destination.toLowerCase()
+  );
+}
 
-    // Type filter
+    // 4. Sidebar Type filter
     if (filters.type) {
       allPackages = allPackages.filter((pkg) => pkg.type === filters.type);
     }
 
-    // Travelers filter
+    // 5. Travelers filter
     if (filters.travelers) {
       allPackages = allPackages.filter((pkg) =>
         pkg.travelers?.includes(filters.travelers)
       );
     }
 
-    // Price filter
+    // 6. Price filter
     if (filters.price && filters.price.length === 2) {
       allPackages = allPackages.filter(
         (pkg) =>
@@ -145,21 +158,18 @@ const PackagesPage = () => {
     // Sorting
     if (filters.sortBy === "low-high")
       allPackages.sort((a, b) => a.numericPrice - b.numericPrice);
-
     if (filters.sortBy === "high-low")
       allPackages.sort((a, b) => b.numericPrice - a.numericPrice);
-
     if (filters.sortBy === "rating")
       allPackages.sort((a, b) => b.rating - a.rating);
-
     if (filters.sortBy === "popularity")
       allPackages.sort((a, b) => b.popularity - a.popularity);
 
     return allPackages;
-  }, [search, filters]);
+  }, [search, filters, selectedCategory]);
 
   // -----------------------
-  // Pagination (6 cards = 2 rows)
+  // Pagination
   // -----------------------
   const cardsPerPage = 6;
   const totalPages = Math.ceil(filteredPackages.length / cardsPerPage);
@@ -175,7 +185,7 @@ const PackagesPage = () => {
 
   return (
     <UserLayout>
-      <div className="flex flex-col lg:flex-row w-full py-2">
+      <div className="flex flex-col lg:flex-row w-full py-2 gap-6">
         {/* Sidebar */}
         <FilterSidebar
           search={search}
@@ -187,20 +197,17 @@ const PackagesPage = () => {
 
         {/* Package Listing */}
         <div className="flex-1">
-          <h2 className="text-2xl font-bold text-white mb-4">
-            All Packages ({filteredPackages.length})
-          </h2>
+          <div className="mb-6">
+            <h2 className="text-2xl font-bold text-white">
+              {selectedCategory === "All" ? "All Packages" : `${selectedCategory} Packages`}
+              <span className="text-gray-400 text-sm font-normal ml-3">
+                ({filteredPackages.length} found)
+              </span>
+            </h2>
+          </div>
 
           {/* Cards */}
-          <div
-            className="
-              grid
-              grid-cols-2
-              lg:grid-cols-3
-              gap-6
-              w-full
-            "
-          >
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-6 w-full">
             {currentData.map((pkg) => (
               <PackageCard
                 key={pkg.id}
@@ -213,7 +220,7 @@ const PackagesPage = () => {
                 duration={pkg.duration}
                 price={pkg.price}
                 cta={
-                  <button onClick={()=>navigate('/packageDetail')} className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/80 transition">
+                  <button onClick={()=>navigate('/packageDetail')} className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/80 transition w-full">
                     Book Now
                   </button>
                 }
@@ -221,19 +228,24 @@ const PackagesPage = () => {
             ))}
           </div>
 
-          {/* Empty */}
+          {/* Empty State */}
           {filteredPackages.length === 0 && (
-            <p className="text-gray-400 text-center mt-12">
-              No packages found.
-            </p>
+            <div className="text-center py-20 bg-white/5 rounded-xl border border-dashed border-white/10 mt-4">
+              <p className="text-gray-400">
+                No packages found for this category or filter.
+              </p>
+              <button onClick={handleClear} className="mt-4 text-primary hover:underline">
+                Reset All Filters
+              </button>
+            </div>
           )}
 
           {/* Pagination */}
           {filteredPackages.length > 0 && (
-            <div className="flex justify-center items-center gap-2 mt-8">
+            <div className="flex justify-center items-center gap-2 mt-12 mb-8">
               <button
                 onClick={() => changePage(currentPage - 1)}
-                className="px-3 py-2 rounded-lg bg-gray-700 text-white hover:bg-gray-600 transition disabled:opacity-40"
+                className="px-4 py-2 rounded-lg bg-gray-800 text-white hover:bg-gray-700 transition disabled:opacity-40"
                 disabled={currentPage === 1}
               >
                 Prev
@@ -243,10 +255,10 @@ const PackagesPage = () => {
                 <button
                   key={i}
                   onClick={() => changePage(i + 1)}
-                  className={`px-3 py-2 rounded-lg transition ${
+                  className={`w-10 h-10 rounded-lg transition ${
                     currentPage === i + 1
                       ? "bg-primary text-white"
-                      : "bg-gray-700 text-gray-300 hover:bg-gray-600"
+                      : "bg-gray-800 text-gray-300 hover:bg-gray-700"
                   }`}
                 >
                   {i + 1}
@@ -255,7 +267,7 @@ const PackagesPage = () => {
 
               <button
                 onClick={() => changePage(currentPage + 1)}
-                className="px-3 py-2 rounded-lg bg-gray-700 text-white hover:bg-gray-600 transition disabled:opacity-40"
+                className="px-4 py-2 rounded-lg bg-gray-800 text-white hover:bg-gray-700 transition disabled:opacity-40"
                 disabled={currentPage === totalPages}
               >
                 Next

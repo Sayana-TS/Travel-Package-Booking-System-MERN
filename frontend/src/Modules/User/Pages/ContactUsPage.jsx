@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import UserLayout from '../Layouts/UserLayout';
-import Breadcrumb from '../Components/Breadcrumb';
+import Breadcrumb from '../../../Shared/Components/Breadcrumb';
 
 // --- MOCK DATA ---
 const BREADCRUMB_PATH = [

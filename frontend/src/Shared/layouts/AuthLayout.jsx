@@ -67,4 +67,3 @@ const AuthLayout = ({ children, quote }) => {
 };
 
 export default AuthLayout;
-

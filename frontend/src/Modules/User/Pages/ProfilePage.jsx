@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import UserLayout from '../Layouts/UserLayout';
-import Breadcrumb from '../Components/Breadcrumb';
+import Breadcrumb from '../../../Shared/Components/Breadcrumb';
 import { Link } from 'react-router-dom';
 
 // --- MOCK DATA ---

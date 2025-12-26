@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import Breadcrumb from '../Components/Breadcrumb'; // Your existing component
+import Breadcrumb from '../../../Shared/Components/Breadcrumb'; // Your existing component
 import BookingDetailsForm from '../Components/BookingDetailsForm';
 import SidebarBooking from '../Components/SidebarBooking';
 import UserLayout from '../Layouts/UserLayout';

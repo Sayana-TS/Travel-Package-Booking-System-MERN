@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import Breadcrumb from '../Components/Breadcrumb'; 
+import Breadcrumb from '../../../Shared/Components/Breadcrumb'; 
 import ConfirmationCard from '../Components/ConfirmationCard'; 
 import RecommendedPackageSection from '../Components/RecommendedPackageSection'; 
 import UserLayout from '../Layouts/UserLayout';
