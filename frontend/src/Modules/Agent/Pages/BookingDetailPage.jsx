@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import AgentLayout from '../../../Shared/layouts/AgentLayout';
 import Breadcrumb from '../../../Shared/Components/Breadcrumb';
 
-const BookingDetailsPage = () => {
+// Accept 'role' as a prop (default to 'agent')
+const BookingDetailsPage = ({ role = 'agent' }) => {
+  const isAdmin = role === 'admin';
   const [activeTab, setActiveTab] = useState('itinerary');
   const [internalNote, setInternalNote] = useState('');
 
@@ -50,21 +52,17 @@ const BookingDetailsPage = () => {
     alert(`${actionType} initiated for ${bookingData.id}`);
   };
 
-  const saveInternalNote = () => {
-    console.log("Saving Note:", internalNote);
-    alert("Note saved successfully!");
-    setInternalNote('');
-  };
-
   return (
-    <AgentLayout>
+    <AgentLayout role={role}>
       <main className="flex-1 p-4 md:p-8 animate-[fadeIn_0.4s_ease-out]">
         
-        {/* Breadcrumbs */}
+        {/* Breadcrumbs - Dynamic Path based on role */}
         <Breadcrumb 
-            path={[{ label: 'Bookings', href: '/agent/bookings' }]} 
+            path={[{ 
+              label: 'Bookings', 
+              href: isAdmin ? '/admin/bookings' : '/agent/bookings' 
+            }]} 
             currentPage={bookingData.id}
-             
           />
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -87,20 +85,6 @@ const BookingDetailsPage = () => {
                       </span>
                     </div>
                   </div>
-                  {/* <div className="flex items-center gap-2 w-full sm:w-auto">
-                    <button 
-                      onClick={() => handleAction('Modify')}
-                      className="flex-1 sm:flex-none flex items-center justify-center gap-2 text-sm font-medium bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-all"
-                    >
-                      <span className="material-symbols-outlined text-base">edit</span> Modify
-                    </button>
-                    <button 
-                      onClick={() => handleAction('Cancel')}
-                      className="flex-1 sm:flex-none flex items-center justify-center gap-2 text-sm font-medium bg-red-50 text-red-600 dark:bg-red-900/20 dark:text-red-400 px-4 py-2 rounded-lg hover:bg-red-100 transition-all"
-                    >
-                      <span className="material-symbols-outlined text-base">cancel</span> Cancel
-                    </button>
-                  </div> */}
                 </div>
 
                 <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 text-sm">
@@ -128,12 +112,12 @@ const BookingDetailsPage = () => {
               </div>
               <div className="bg-slate-50 dark:bg-slate-900/50 px-6 py-3 border-t border-slate-200 dark:border-slate-800 flex justify-between items-center flex-wrap gap-4">
                 <div className="flex gap-4 text-xs font-bold">
-                  <button onClick={() => handleAction('Email')} className="flex items-center gap-1 hover:text-primary transition-colors">
-                    <span className="material-symbols-outlined text-sm">mail</span> EMAIL CUSTOMER
-                  </button>
-                  {/* <button onClick={() => handleAction('Call')} className="flex items-center gap-1 hover:text-primary transition-colors">
-                    <span className="material-symbols-outlined text-sm">call</span> CALL
-                  </button> */}
+                  {/* HIDDEN FOR ADMIN */}
+                  {!isAdmin && (
+                    <button onClick={() => handleAction('Email')} className="flex items-center gap-1 hover:text-primary transition-colors text-slate-600 dark:text-slate-300">
+                      <span className="material-symbols-outlined text-sm">mail</span> EMAIL CUSTOMER
+                    </button>
+                  )}
                 </div>
                 <p className="text-[10px] uppercase tracking-wider text-slate-400 font-bold">Created: {bookingData.createdDate}</p>
               </div>
@@ -187,7 +171,7 @@ const BookingDetailsPage = () => {
                       {['Daily Breakfast', 'Airport Transfers', 'Ski Equipment'].map((item) => (
                         <div key={item} className="flex items-center gap-3 p-4 rounded-lg bg-slate-100 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800">
                           <span className="material-symbols-outlined text-primary">check_circle</span>
-                          <span className="text-sm font-medium">{item} Included</span>
+                          <span className="text-sm font-medium text-slate-700 dark:text-slate-200">{item} Included</span>
                         </div>
                       ))}
                     </div>
@@ -196,7 +180,6 @@ const BookingDetailsPage = () => {
 
                 {activeTab === 'travelers' && (
                   <div className="space-y-4">
-                    {/* Desktop View Table */}
                     <div className="hidden md:block bg-white dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden">
                       <table className="w-full text-left border-collapse">
                         <thead>
@@ -217,18 +200,17 @@ const BookingDetailsPage = () => {
                         </tbody>
                       </table>
                     </div>
-                    {/* Mobile View Cards */}
                     <div className="md:hidden space-y-4">
                       {bookingData.travelerList.map((traveler, index) => (
                         <div key={index} className="bg-white dark:bg-slate-800/50 p-4 rounded-xl border border-slate-200 dark:border-slate-800 space-y-2">
-                           <div className="flex justify-between items-center">
+                            <div className="flex justify-between items-center">
                               <span className="text-xs font-bold text-slate-400 uppercase">Traveler {index + 1}</span>
                               <span className="text-xs font-bold bg-primary/10 text-primary px-2 py-0.5 rounded-md">Age: {traveler.age}</span>
-                           </div>
-                           <p className="font-bold text-slate-900 dark:text-white">{traveler.name}</p>
-                           <p className="text-sm text-slate-500 dark:text-slate-400 flex items-center gap-2">
-                             <span className="material-symbols-outlined text-sm">alternate_email</span> {traveler.contact}
-                           </p>
+                            </div>
+                            <p className="font-bold text-slate-900 dark:text-white">{traveler.name}</p>
+                            <p className="text-sm text-slate-500 dark:text-slate-400 flex items-center gap-2">
+                              <span className="material-symbols-outlined text-sm">alternate_email</span> {traveler.contact}
+                            </p>
                         </div>
                       ))}
                     </div>
@@ -264,7 +246,7 @@ const BookingDetailsPage = () => {
               </div>
             </div>
 
-            {/* Booking Timeline - MOVED TO LEFT SIDE */}
+            {/* Booking Timeline */}
             <div className="bg-white dark:bg-slate-800/50 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 p-6 pb-2">
               <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-6">Booking Timeline</h3>
               <div className="relative">
@@ -289,50 +271,35 @@ const BookingDetailsPage = () => {
                 </div>
               </div>
             </div>
-
-            {/* Internal Notes */}
-            {/* <div className="bg-white dark:bg-slate-800/50 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 p-4 md:p-6">
-              <h3 className="font-bold mb-4 text-slate-900 dark:text-white flex items-center gap-2">
-                <span className="material-symbols-outlined text-base">lock</span> Internal Admin Notes
-              </h3>
-              <textarea 
-                value={internalNote}
-                onChange={(e) => setInternalNote(e.target.value)}
-                className="w-full text-sm rounded-lg bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-800 focus:ring-2 focus:ring-primary/20 focus:border-primary p-3 transition-all" 
-                placeholder="Add private note for internal staff..."
-                rows="3"
-              />
-              <div className="flex justify-end mt-4">
-                <button 
-                  onClick={saveInternalNote}
-                  disabled={!internalNote.trim()}
-                  className="w-full sm:w-auto px-6 bg-slate-900 dark:bg-white dark:text-slate-900 text-white text-sm font-bold py-2.5 rounded-lg hover:opacity-90 disabled:opacity-50 transition-all"
-                >
-                  Save Note
-                </button>
-              </div>
-            </div> */}
           </div>
 
           {/* Right Column: Sidebar */}
-          <div className="space-y-6 md:space-y-8">
+          <div className="space-y-6 md:space-y-8 sticky top-0 self-start">
             
             {/* Action Section */}
             <div className="bg-white dark:bg-slate-800/50 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 p-6">
               <h2 className="text-slate-900 dark:text-white text-lg font-bold mb-4">Actions</h2>
               <div className="flex flex-col gap-3 pt-6 border-t border-slate-100 dark:border-slate-800">
-                <button onClick={() => handleAction('Complete')} className="w-full flex items-center justify-center rounded-lg h-11 bg-green-600 text-white gap-2 text-sm font-bold hover:bg-green-700 transition-all shadow-sm">
-                  <span className="material-symbols-outlined text-base">check_circle</span>
-                  <span>Mark as Completed</span>
-                </button>
+                {/* HIDDEN FOR ADMIN */}
+                {!isAdmin && (
+                  <button onClick={() => handleAction('Complete')} className="w-full flex items-center justify-center rounded-lg h-11 bg-green-600 text-white gap-2 text-sm font-bold hover:bg-green-700 transition-all shadow-sm">
+                    <span className="material-symbols-outlined text-base">check_circle</span>
+                    <span>Mark as Completed</span>
+                  </button>
+                )}
+                
                 <button onClick={() => handleAction('Print')} className="w-full flex items-center justify-center rounded-lg h-11 bg-slate-100 dark:bg-slate-700 text-slate-900 dark:text-white gap-2 text-sm font-bold hover:bg-slate-200 dark:hover:bg-slate-600 transition-all">
                   <span className="material-symbols-outlined text-base">print</span>
                   <span>Print Booking Details</span>
                 </button>
-                <button onClick={() => handleAction('Cancel')} className="w-full flex items-center justify-center rounded-lg h-11 bg-red-50 dark:bg-red-900/10 text-red-600 gap-2 text-sm font-bold hover:bg-red-100 dark:hover:bg-red-900/20 transition-all">
-                  <span className="material-symbols-outlined text-base">cancel</span>
-                  <span>Cancel Booking</span>
-                </button>
+
+                {/* HIDDEN FOR ADMIN */}
+                {!isAdmin && (
+                  <button onClick={() => handleAction('Cancel')} className="w-full flex items-center justify-center rounded-lg h-11 bg-red-50 dark:bg-red-900/10 text-red-600 gap-2 text-sm font-bold hover:bg-red-100 dark:hover:bg-red-900/20 transition-all">
+                    <span className="material-symbols-outlined text-base">cancel</span>
+                    <span>Cancel Booking</span>
+                  </button>
+                )}
               </div>
             </div>
 

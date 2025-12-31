@@ -2,11 +2,11 @@ import React, { useState, useMemo } from 'react';
 import AgentLayout from '../../../Shared/layouts/AgentLayout';
 import TicketTable from '../Components/TicketTable';
 import TicketFilters from '../Components/TicketFilters';
-import TicketDetailModal from '../Components/TicketDetailModal'; // Import Detail Modal
-import TicketCreateModal from '../Components/TicketCreateModal'; // Import Create Modal
+import TicketDetailModal from '../Components/TicketDetailModal'; 
+import TicketCreateModal from '../Components/TicketCreateModal'; 
 
-const SupportTicketsPage = () => {
-  // --- Data State ---
+const SupportTicketsPage = ({ role = 'agent' }) => {
+  // --- Data State (Ready for API Integration) ---
   const [tickets, setTickets] = useState([
     { id: '12345', subject: 'Booking Confirmation Error', related: 'Grand Hyatt', status: 'Open', priority: 'High', createdAt: '2023-10-27', updatedAt: '2023-10-27' },
     { id: '12346', subject: 'Payment Gateway Issue', related: 'The Ritz-Carlton', status: 'Pending', priority: 'Urgent', createdAt: '2023-10-26', updatedAt: '2023-10-27' },
@@ -22,7 +22,7 @@ const SupportTicketsPage = () => {
 
   // --- Modal States ---
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const [selectedTicket, setSelectedTicket] = useState(null); // When null, detail modal is closed
+  const [selectedTicket, setSelectedTicket] = useState(null);
 
   // --- Filtering Logic ---
   const filteredTickets = useMemo(() => {
@@ -39,7 +39,7 @@ const SupportTicketsPage = () => {
   // --- Action Handlers ---
   const handleCreateTicket = (newTicketData) => {
     const newEntry = {
-      id: Math.floor(10000 + Math.random() * 90000).toString(), // Random 5-digit ID
+      id: Math.floor(10000 + Math.random() * 90000).toString(),
       subject: newTicketData.subject,
       related: newTicketData.relatedItem || '-',
       status: 'Open',
@@ -48,33 +48,39 @@ const SupportTicketsPage = () => {
       updatedAt: new Date().toISOString().split('T')[0],
     };
 
-    setTickets([newEntry, ...tickets]); // Prepend new ticket to the list
+    setTickets([newEntry, ...tickets]);
+    setIsCreateModalOpen(false); // Close modal after creation
   };
 
   return (
-    <AgentLayout>
+    <AgentLayout role={role}>
       <main className="flex-1 p-6 md:p-10 animate-[fadeIn_0.4s_ease-out]">
         <div className="mx-auto max-w-7xl">
           
-          {/* Page Header */}
+          {/* Dynamic Page Header */}
           <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
             <div>
               <h1 className="text-3xl font-black leading-tight tracking-tight text-slate-900 dark:text-white">
                 Support Tickets
               </h1>
-              <p className="text-slate-500 dark:text-subtext-dark font-medium">Manage and track your assistance requests</p>
+              <p className="text-slate-500 dark:text-subtext-dark font-medium">
+                {role === 'admin' 
+                  ? "Monitor and resolve system-wide support requests from agents" 
+                  : "Manage and track your assistance requests"}
+              </p>
             </div>
-            {/* Open Create Modal */}
+            
+            {/* Create Button (Visible to both, but labeled contextually) */}
             <button 
               onClick={() => setIsCreateModalOpen(true)}
               className="flex items-center gap-2 rounded-xl bg-primary h-12 px-6 text-white text-sm font-bold shadow-lg shadow-primary/20 hover:bg-primary/90 hover:-translate-y-0.5 transition-all active:scale-95"
             >
               <span className="material-symbols-outlined">add</span>
-              <span>Submit New Ticket</span>
+              <span>{role === 'admin' ? "New Internal Ticket" : "Submit New Ticket"}</span>
             </button>
           </div>
 
-          {/* Filters Component */}
+          {/* Shared Filters Component */}
           <TicketFilters 
             searchQuery={searchQuery}
             setSearchQuery={setSearchQuery}
@@ -84,10 +90,10 @@ const SupportTicketsPage = () => {
             setPriorityFilter={setPriorityFilter}
           />
 
-          {/* Table Component */}
+          {/* Shared Table Component */}
           <TicketTable 
             tickets={filteredTickets} 
-            onView={(ticket) => setSelectedTicket(ticket)} // Pass the view handler
+            onView={(ticket) => setSelectedTicket(ticket)} 
           />
           
         </div>
@@ -95,18 +101,18 @@ const SupportTicketsPage = () => {
 
       {/* --- Modals --- */}
       
-      {/* 1. Create Ticket Modal */}
       <TicketCreateModal 
         isOpen={isCreateModalOpen} 
         onClose={() => setIsCreateModalOpen(false)}
         onSubmit={handleCreateTicket} 
+        isAdmin={role === 'admin'}
       />
 
-      {/* 2. View/Detail Ticket Modal */}
       <TicketDetailModal 
         isOpen={!!selectedTicket} 
         ticket={selectedTicket} 
         onClose={() => setSelectedTicket(null)} 
+        isAdmin={role === 'admin'} // Pass role to modal to enable admin-only actions like "Close Ticket"
       />
 
     </AgentLayout>

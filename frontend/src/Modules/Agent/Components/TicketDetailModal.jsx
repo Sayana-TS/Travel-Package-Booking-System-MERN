@@ -1,16 +1,20 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-const TicketDetailModal = ({ isOpen, onClose, ticket }) => {
+const TicketDetailModal = ({ isOpen, onClose, ticket, isAdmin = false }) => {
   const [reply, setReply] = useState('');
   const [messages, setMessages] = useState([]);
   const [isClosing, setIsClosing] = useState(false);
+  const [localAssignedTo, setLocalAssignedTo] = useState('');
+  const [attachments, setAttachments] = useState([]); // State for uploaded files
   const scrollRef = useRef(null);
+  const fileInputRef = useRef(null);
 
-  // Initialize messages and handle body scroll lock
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
-      // Mock initial load - in production, fetch from API using ticket.id
+      setLocalAssignedTo(ticket?.assignedTo || '');
+      setAttachments([]); // Reset attachments when modal opens
+      
       setMessages([
         {
           id: 1,
@@ -35,17 +39,16 @@ const TicketDetailModal = ({ isOpen, onClose, ticket }) => {
     return () => { document.body.style.overflow = 'unset'; };
   }, [isOpen, ticket]);
 
-  // Auto-scroll to bottom on new messages
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
-  }, [messages]);
+  }, [messages, attachments]); // Added attachments to trigger scroll if section appears
 
   if (!isOpen || !ticket) return null;
 
   const handleSendReply = () => {
-    if (!reply.trim()) return;
+    if (!reply.trim() && attachments.length === 0) return;
     
     const newMessage = {
       id: Date.now(),
@@ -53,20 +56,43 @@ const TicketDetailModal = ({ isOpen, onClose, ticket }) => {
       role: "agent",
       time: new Date().toLocaleString([], { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' }),
       message: reply,
-      avatar: "https://ui-avatars.com/api/?name=Alex+Johnson&background=0ea5e9&color=fff"
+      avatar: "https://ui-avatars.com/api/?name=Alex+Johnson&background=0ea5e9&color=fff",
+      files: attachments.map(f => f.name) // Simulating attachment storage
     };
 
     setMessages([...messages, newMessage]);
     setReply('');
+    setAttachments([]); // Clear attachments after sending
   };
 
   const handleCloseTicket = () => {
-    // Logic to update ticket status to "Closed" would go here
     setIsClosing(true);
     setTimeout(() => {
       onClose();
       setIsClosing(false);
     }, 300);
+  };
+
+  const handleAttachmentClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = (e) => {
+    const files = Array.from(e.target.files);
+    if (files.length > 0) {
+      setAttachments(prev => [...prev, ...files]);
+    }
+    e.target.value = ''; // Reset input
+  };
+
+  const removeAttachment = (index) => {
+    setAttachments(prev => prev.filter((_, i) => i !== index));
+  };
+
+  // Function to view the attachment
+  const handleViewAttachment = (file) => {
+    const url = URL.createObjectURL(file);
+    window.open(url, '_blank');
   };
 
   return (
@@ -76,6 +102,14 @@ const TicketDetailModal = ({ isOpen, onClose, ticket }) => {
     >
       <div className="relative w-full max-w-4xl max-h-[95vh] sm:max-h-[90vh] bg-white dark:bg-slate-900 shadow-2xl rounded-3xl flex flex-col overflow-hidden border border-slate-200 dark:border-slate-800">
         
+        <input 
+          type="file"
+          ref={fileInputRef}
+          onChange={handleFileChange}
+          className="hidden"
+          multiple 
+        />
+
         {/* Header */}
         <div className="flex items-center justify-between p-5 sm:p-6 border-b border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 z-10">
           <div className="flex items-center gap-4">
@@ -105,14 +139,14 @@ const TicketDetailModal = ({ isOpen, onClose, ticket }) => {
         >
           
           {/* Metadata Grid */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 p-5 bg-slate-50 dark:bg-slate-800/40 rounded-3xl border border-slate-100 dark:border-slate-800/50">
+          <div className={`grid grid-cols-2 sm:grid-cols-3 lg:${isAdmin ? 'grid-cols-5' : 'grid-cols-4'} gap-4 sm:gap-6 p-5 bg-slate-50 dark:bg-slate-800/40 rounded-3xl border border-slate-100 dark:border-slate-800/50`}>
             <div className="col-span-2 lg:col-span-1">
               <h3 className="text-[10px] font-black uppercase tracking-[0.15em] text-slate-400 mb-1">Subject</h3>
-              <p className="font-bold text-slate-900 dark:text-white text-sm sm:text-base leading-tight">{ticket.subject}</p>
+              <p className="font-bold text-slate-900 dark:text-white text-sm leading-tight">{ticket.subject}</p>
             </div>
             <div>
-              <h3 className="text-[10px] font-black uppercase tracking-[0.15em] text-slate-400 mb-1">Entity</h3>
-              <p className="font-bold text-slate-900 dark:text-white text-sm leading-tight">{ticket.related}</p>
+              <h3 className="text-[10px] font-black uppercase tracking-[0.15em] text-slate-400 mb-1">Submitted By</h3>
+              <p className="font-bold text-slate-900 dark:text-white text-sm leading-tight">{ticket.submittedBy || 'Customer'}</p>
             </div>
             <div>
               <h3 className="text-[10px] font-black uppercase tracking-[0.15em] text-slate-400 mb-1">Status</h3>
@@ -124,11 +158,24 @@ const TicketDetailModal = ({ isOpen, onClose, ticket }) => {
             <div>
               <h3 className="text-[10px] font-black uppercase tracking-[0.15em] text-slate-400 mb-1">Priority</h3>
               <div className="mt-1">
-                <span className="px-2.5 py-1 text-[10px] font-black text-white rounded-lg bg-primary uppercase">
-                  {ticket.priority}
-                </span>
+                <span className="px-2.5 py-1 text-[10px] font-black text-white rounded-lg bg-primary uppercase">{ticket.priority}</span>
               </div>
             </div>
+            {isAdmin && (
+              <div>
+                <h3 className="text-[10px] font-black uppercase tracking-[0.15em] text-slate-400 mb-1">Assigned To</h3>
+                <select 
+                  value={localAssignedTo}
+                  onChange={(e) => setLocalAssignedTo(e.target.value)}
+                  className="bg-transparent font-bold text-slate-900 dark:text-white text-sm outline-none border-none p-0 cursor-pointer focus:ring-0"
+                >
+                  <option value="" className="dark:bg-slate-900">Unassigned</option>
+                  <option value="Staff 1" className="dark:bg-slate-900">Staff 1</option>
+                  <option value="Staff 2" className="dark:bg-slate-900">Staff 2</option>
+                  <option value="Alex Johnson" className="dark:bg-slate-900">Alex Johnson</option>
+                </select>
+              </div>
+            )}
           </div>
 
           {/* Issue Section */}
@@ -138,15 +185,56 @@ const TicketDetailModal = ({ isOpen, onClose, ticket }) => {
               <h3 className="text-sm font-black uppercase tracking-wider">Description</h3>
             </div>
             <p className="text-slate-600 dark:text-slate-400 text-sm sm:text-base leading-relaxed bg-slate-50/50 dark:bg-slate-800/20 p-4 rounded-2xl">
-              A customer is reporting that they are not receiving a booking confirmation email after completing their payment. 
-              They have checked their spam folder and have not found it. They are requesting assistance.
+              {ticket.description || "A customer is reporting that they are not receiving a booking confirmation email after completing their payment."}
             </p>
           </div>
+
+          {/* Dedicated Uploaded Attachment Section */}
+          {attachments.length > 0 && (
+            <div className="space-y-3 animate-[fadeIn_0.3s_ease-out]">
+              <div className="flex items-center gap-2 text-slate-900 dark:text-white">
+                <span className="material-symbols-outlined text-lg">attach_file_add</span>
+                <h3 className="text-sm font-black uppercase tracking-wider">New Attachments ({attachments.length})</h3>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {attachments.map((file, index) => (
+                  <div key={index} className="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-2xl">
+                    <div className="flex items-center gap-3 overflow-hidden">
+                      <div className="size-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0">
+                        <span className="material-symbols-outlined text-xl">description</span>
+                      </div>
+                      <div className="overflow-hidden">
+                        <p className="text-xs font-bold text-slate-700 dark:text-slate-200 truncate">{file.name}</p>
+                        <p className="text-[10px] text-slate-400 font-medium">{(file.size / 1024).toFixed(1)} KB</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      {/* VIEW ATTACHMENT OPTION */}
+                      <button 
+                        onClick={() => handleViewAttachment(file)}
+                        className="p-1 hover:text-primary text-slate-400 transition-colors"
+                        title="View attachment"
+                      >
+                        <span className="material-symbols-outlined text-xl">visibility</span>
+                      </button>
+                      <button 
+                        onClick={() => removeAttachment(index)}
+                        className="p-1 hover:text-red-500 text-slate-400 transition-colors"
+                        title="Remove"
+                      >
+                        <span className="material-symbols-outlined text-xl">delete_sweep</span>
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* Messages Section */}
           <div className="pt-6 border-t border-slate-100 dark:border-slate-800 space-y-6">
             <div className="flex items-center justify-between mb-2">
-               <h3 className="text-sm font-black uppercase tracking-wider text-slate-900 dark:text-white flex items-center gap-2">
+                <h3 className="text-sm font-black uppercase tracking-wider text-slate-900 dark:text-white flex items-center gap-2">
                 <span className="material-symbols-outlined text-primary">forum</span>
                 Conversation History
               </h3>
@@ -154,20 +242,12 @@ const TicketDetailModal = ({ isOpen, onClose, ticket }) => {
                 {messages.length} Messages
               </span>
             </div>
-            
             <div className="space-y-6">
               {messages.map((msg) => (
                 <div key={msg.id} className={`flex gap-3 sm:gap-4 ${msg.role === 'admin' ? 'flex-row-reverse' : 'flex-row'}`}>
-                  <div 
-                    className="size-8 sm:size-10 rounded-xl bg-cover bg-center ring-2 ring-white dark:ring-slate-800 flex-shrink-0 shadow-sm" 
-                    style={{ backgroundImage: `url("${msg.avatar}")` }}
-                  />
+                  <div className="size-8 sm:size-10 rounded-xl bg-cover bg-center ring-2 ring-white dark:ring-slate-800 flex-shrink-0 shadow-sm" style={{ backgroundImage: `url("${msg.avatar}")` }} />
                   <div className={`flex flex-col max-w-[85%] sm:max-w-[75%] ${msg.role === 'admin' ? 'items-end' : 'items-start'}`}>
-                    <div className={`p-4 rounded-2xl shadow-sm text-sm sm:text-base ${
-                      msg.role === 'admin' 
-                        ? 'bg-slate-800 dark:bg-slate-700 text-white rounded-tr-none' 
-                        : 'bg-primary/5 dark:bg-primary/10 text-slate-800 dark:text-slate-200 border border-primary/10 rounded-tl-none'
-                    }`}>
+                    <div className={`p-4 rounded-2xl shadow-sm text-sm sm:text-base ${msg.role === 'admin' ? 'bg-slate-800 dark:bg-slate-700 text-white rounded-tr-none' : 'bg-primary/5 dark:bg-primary/10 text-slate-800 dark:text-slate-200 border border-primary/10 rounded-tl-none'}`}>
                       <p className="leading-relaxed whitespace-pre-wrap">{msg.message}</p>
                     </div>
                     <div className="flex items-center gap-2 mt-2 px-1">
@@ -199,21 +279,21 @@ const TicketDetailModal = ({ isOpen, onClose, ticket }) => {
               }}
             />
             <div className="flex items-center justify-between p-2 border-t border-slate-200/50 dark:border-slate-700/50">
-              <button className="flex items-center gap-2 text-[10px] font-black uppercase text-slate-500 hover:text-primary transition-colors px-2 py-1">
+              <button 
+                onClick={handleAttachmentClick}
+                className="flex items-center gap-2 text-[10px] font-black uppercase text-slate-500 hover:text-primary transition-colors px-2 py-1"
+              >
                 <span className="material-symbols-outlined text-lg">attach_file</span>
                 <span className="hidden sm:inline">Add Attachment</span>
               </button>
               
               <div className="flex items-center gap-2">
-                <button 
-                  onClick={handleCloseTicket}
-                  className="px-4 py-2 text-[10px] font-black uppercase text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-xl transition-all"
-                >
+                <button onClick={handleCloseTicket} className="px-4 py-2 text-[10px] font-black uppercase text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-xl transition-all">
                   Close Ticket
                 </button>
                 <button 
                   onClick={handleSendReply}
-                  disabled={!reply.trim()}
+                  disabled={!reply.trim() && attachments.length === 0}
                   className="px-5 py-2 text-[10px] font-black uppercase text-white bg-primary rounded-xl shadow-lg shadow-primary/30 hover:shadow-primary/40 disabled:opacity-50 disabled:shadow-none hover:-translate-y-0.5 transition-all active:scale-95 flex items-center gap-2"
                 >
                   <span>Send</span>

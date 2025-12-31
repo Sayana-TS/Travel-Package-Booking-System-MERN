@@ -11,6 +11,8 @@ import ManageImagesPage from "./Pages/ManageImagePage";
 import ManagePricingPage from "./Pages/ManagePricingPage";
 import SupportTicketsPage from "./Pages/SupportTicketsPage";
 import MyPackagesPage from "./Pages/MyPackagesPage";
+import CreatePackagePage from "./Pages/CreatePackagePage";
+import AgentProfilePage from "./Pages/AgentProfilePage";
 
 export const agentRoutes = (
   <>
@@ -28,5 +30,8 @@ export const agentRoutes = (
     <Route path="/agent/pricing" element={<ManagePricingPage/>} />
     <Route path="/agent/tickets" element={<SupportTicketsPage/>} />
     <Route path="/agent/packages" element={<MyPackagesPage/>} />
+    <Route path="/agent/packages/create" element={<CreatePackagePage/>} />
+    <Route path="/agent/packages/edit/:id" element={<CreatePackagePage/>} />
+    <Route path="/agent/profile" element={<AgentProfilePage/>} />
   </>
 );

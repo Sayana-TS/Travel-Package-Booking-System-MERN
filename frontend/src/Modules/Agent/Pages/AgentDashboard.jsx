@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { 
   Package, Hotel, BedDouble, Users, 
   DollarSign, Calendar 
@@ -55,6 +55,9 @@ const PreviewItem = ({ item }) => (
 );
 
 const AgentDashboard = () => {
+
+  const navigate = useNavigate()
+
   return (
     <AgentLayout>
       <div className="space-y-6 sm:space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700 pb-10">
@@ -91,7 +94,7 @@ const AgentDashboard = () => {
             <h2 className="text-lg sm:text-xl font-bold text-white mb-4 flex items-center gap-2">
               <Hotel size={18} className="text-[#056bd1]" /> Managed Hotels
             </h2>
-            <div className="space-y-3">
+            <div onClick={()=>navigate('/hotelDetails')} className="space-y-3">
               {DASHBOARD_DATA.hotels.map((h, i) => <PreviewItem key={i} item={h} />)}
             </div>
           </section>
@@ -100,7 +103,7 @@ const AgentDashboard = () => {
             <h2 className="text-lg sm:text-xl font-bold text-white mb-4 flex items-center gap-2">
               <Package size={18} className="text-[#056bd1]" /> Active Packages
             </h2>
-            <div className="space-y-3">
+            <div onClick={()=>navigate('/agent/packages')} className="space-y-3">
               {DASHBOARD_DATA.packages.map((p, i) => <PreviewItem key={i} item={p} />)}
             </div>
           </section>

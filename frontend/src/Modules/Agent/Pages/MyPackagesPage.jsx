@@ -1,11 +1,14 @@
+// src/components/Agent/MyPackagesPage.jsx
 import React, { useState, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import AgentLayout from '../../../Shared/layouts/AgentLayout';
 import PackageStats from '../Components/PackageStats';
 import PackageCard from '../Components/PackageCard';
+import ViewPackageModal from '../Components/ViewPackageModal'; 
 
 const MyPackagesPage = () => {
   // --- Dummy Data ---
-  const [packages] = useState([
+  const [packages, setPackages] = useState([
     { id: 1, title: 'Exotic Bali Adventure', location: 'Bali, Indonesia', startDate: 'Oct 15', endDate: 'Oct 25, 2024', submittedDate: 'Oct 01, 2024', status: 'pending', imageUrl: 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=400&q=80' },
     { id: 2, title: 'Parisian Charm Tour', location: 'Paris, France', startDate: 'Nov 10', endDate: 'Nov 17, 2024', submittedDate: 'Sep 28, 2024', status: 'active', imageUrl: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=400&q=80' },
     { id: 3, title: 'Ancient Rome Discovery', location: 'Rome, Italy', startDate: 'Dec 01', endDate: 'Dec 08, 2024', submittedDate: 'Sep 25, 2024', status: 'upcoming', imageUrl: 'https://images.unsplash.com/photo-1552832230-c0197dd311b5?auto=format&fit=crop&w=400&q=80' },
@@ -14,10 +17,22 @@ const MyPackagesPage = () => {
 
   const stats = { total: 124, pending: 12, active: 80, upcoming: 32 };
 
+  // --- NEW CONFIG FOR PACKAGESTATS ---
+  const statsConfig = [
+    { label: 'Total Packages Submitted', value: stats.total, color: 'text-white' },
+    { label: 'Pending Approvals', value: stats.pending, color: 'text-pending' },
+    { label: 'Active / Live', value: stats.active, color: 'text-active' },
+    { label: 'Upcoming', value: stats.upcoming, color: 'text-upcoming' },
+  ];
+
   // --- States ---
   const [activeTab, setActiveTab] = useState('pending');
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState('Date');
+  
+  // View Functionality States
+  const [selectedPackage, setSelectedPackage] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // --- Filtering Logic ---
   const filteredPackages = useMemo(() => {
@@ -29,6 +44,26 @@ const MyPackagesPage = () => {
       );
   }, [packages, activeTab, searchQuery]);
 
+  const navigate = useNavigate();
+
+  // --- Handlers ---
+  const handleView = (pkg) => {
+    setSelectedPackage(pkg);
+    setIsModalOpen(true);
+  };
+
+  const handleEdit = (pkg) => {
+    navigate(`/agent/packages/edit/${pkg.id}`); 
+  };
+
+  const handleDelete = (id) => {
+    const confirmDelete = window.confirm(
+      'Are you sure you want to delete this package? This action cannot be undone.'
+    );
+    if (!confirmDelete) return;
+    setPackages(prev => prev.filter(pkg => pkg.id !== id));
+  };
+
   return (
     <AgentLayout>
       <main className="flex-1 px-4 md:px-10 py-8 w-full max-w-screen-xl mx-auto animate-[fadeIn_0.3s_ease-out]">
@@ -39,19 +74,18 @@ const MyPackagesPage = () => {
             <h1 className="text-gray-900 dark:text-white text-4xl font-black tracking-tight">My Packages</h1>
             <p className="text-gray-500 dark:text-gray-400 text-base font-medium mt-1">View and manage your submitted travel offerings.</p>
           </div>
-          <button className="flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-xl font-bold text-sm shadow-lg shadow-primary/20 hover:bg-primary/90 hover:-translate-y-0.5 transition-all active:scale-95">
+          <button onClick={()=>navigate('/agent/packages/create')} className="flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-xl font-bold text-sm shadow-lg shadow-primary/20 hover:bg-primary/90 hover:-translate-y-0.5 transition-all active:scale-95">
             <span className="material-symbols-outlined">add_circle</span>
             <span>Create New Package</span>
           </button>
         </div>
 
-        <PackageStats stats={stats} />
+        {/* Updated call with 'config' prop */}
+        <PackageStats config={statsConfig} />
 
         {/* Filters & Tabs Bar */}
         <div className="pb-3 border-b border-gray-200 dark:border-gray-700 mb-6">
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-            
-            {/* Custom Tabs */}
             <div className="flex gap-8">
               {['pending', 'active', 'upcoming'].map((tab) => (
                 <button
@@ -75,7 +109,6 @@ const MyPackagesPage = () => {
               ))}
             </div>
 
-            {/* Search and Sort */}
             <div className="flex items-center gap-3">
               <div className="relative group">
                 <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-primary transition-colors">search</span>
@@ -87,14 +120,6 @@ const MyPackagesPage = () => {
                   className="pl-10 pr-4 py-2.5 w-full sm:w-64 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
                 />
               </div>
-              {/* <select 
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value)}
-                className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-2.5 text-sm font-bold focus:ring-primary focus:border-primary outline-none cursor-pointer"
-              >
-                <option>Sort by Date</option>
-                <option>Sort by Name</option>
-              </select> */}
             </div>
           </div>
         </div>
@@ -106,9 +131,9 @@ const MyPackagesPage = () => {
               <PackageCard 
                 key={pkg.id} 
                 pkg={pkg} 
-                onView={(p) => console.log('View', p)} 
-                onEdit={(p) => console.log('Edit', p)}
-                onDelete={(id) => console.log('Delete', id)}
+                onView={handleView} 
+                onEdit={handleEdit}
+                onDelete={handleDelete}
               />
             ))}
           </div>
@@ -129,6 +154,15 @@ const MyPackagesPage = () => {
             <button className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition-colors"><span className="material-symbols-outlined">chevron_right</span></button>
           </div>
         </div>
+
+        {/* View Modal Integration */}
+        <ViewPackageModal 
+          isOpen={isModalOpen} 
+          onClose={() => setIsModalOpen(false)} 
+          packageData={selectedPackage} 
+          userRole="agent" // Explicitly ensures only submitted date shows
+          onEdit={handleEdit} // Links the edit button inside the modal
+        />
 
       </main>
     </AgentLayout>

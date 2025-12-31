@@ -7,6 +7,9 @@ const PackageCard = ({ pkg, onView, onEdit, onDelete }) => {
     upcoming: 'bg-upcoming/80 text-white',
   };
 
+  const canEdit = ['pending', 'upcoming'].includes(pkg.status);
+
+
   return (
     <div className="flex flex-col gap-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
       <div className="relative">
@@ -40,12 +43,36 @@ const PackageCard = ({ pkg, onView, onEdit, onDelete }) => {
           <button onClick={() => onView(pkg)} className="p-2 text-gray-400 hover:text-primary hover:bg-primary/10 rounded-lg transition-colors" title="View">
             <span className="material-symbols-outlined text-lg">visibility</span>
           </button>
-          <button onClick={() => onEdit(pkg)} className="p-2 text-gray-400 hover:text-primary hover:bg-primary/10 rounded-lg transition-colors" title="Edit">
-            <span className="material-symbols-outlined text-lg">edit</span>
-          </button>
-          <button onClick={() => onDelete(pkg.id)} className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors" title="Delete">
-            <span className="material-symbols-outlined text-lg">delete</span>
-          </button>
+          <button
+  onClick={() => canEdit && onEdit(pkg)}
+  disabled={!canEdit}
+  title={
+    canEdit 
+      ? "Edit package" 
+      : "Only pending or upcoming packages can be edited"
+  }
+  className={`p-2 rounded-lg transition-colors ${
+    canEdit
+      ? "text-gray-400 hover:text-primary hover:bg-primary/10"
+      : "text-gray-300 cursor-not-allowed opacity-50"
+  }`}
+>
+  <span className="material-symbols-outlined text-lg">edit</span>
+</button>
+
+<button
+  onClick={() => onDelete(pkg.id)}
+  disabled={pkg.status === 'active'}
+  className={`p-2 rounded-lg transition-colors ${
+    pkg.status === 'active'
+      ? 'text-gray-300 cursor-not-allowed'
+      : 'text-gray-400 hover:text-red-500 hover:bg-red-50'
+  }`}
+  title={pkg.status === 'active' ? 'Active packages cannot be deleted' : 'Delete'}
+>
+  <span className="material-symbols-outlined text-lg">delete</span>
+</button>
+
         </div>
       </div>
     </div>

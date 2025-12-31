@@ -12,9 +12,10 @@ import PackageCards from '../Components/PackageCards';
 import UserLayout from '../Layouts/UserLayout'
 import { Link } from 'react-router-dom';
 
-// --- Dummy Data (Derived from HTML) ---
+// --- Dummy Data (Updated with description) ---
 const PACKAGE_DATA = {
   title: "Yosemite National Park Adventure",
+  description: "Experience the majesty of the High Sierras. This comprehensive 5-day package covers all the essentials—from guided treks beneath the Giant Sequoias to peaceful afternoons by the Merced River. Perfect for families and solo explorers alike seeking a blend of adventure and comfort.",
   price: 1200,
   rating: 4.8,
   reviewCount: 125,
@@ -38,10 +39,40 @@ const PACKAGE_DATA = {
     { icon: "photo_camera", text: "Scenic Views" }
   ],
   activities: [
-    { title: "Guided Yosemite Hikes", imageSrc: "https://lh3.googleusercontent.com/aida-public/AB6AXuBk3h0o_SBKzKHEP6XWEAz0NKEHFfBYHFQJM3PwfTOhPlPjtoDJ7Wrt62hxM-urwSB1BkQ66ydYDmin_dru9eeUeBsd46a2O4-Ly7lnQtgmK9mSLWhNGPHkH3DeXsdFgtT-O9sPl3UFY-qF7Irt4YcXzSvCxglTnvl7H1Cvti7u5GuMChs8rjbuOl6zJqoAUeW19L_7MTGO_PiKjs6f6MplWDZ-i-7gYyindiyXAQRR8U6JhMsRMK68AWz3VlYT3he4Sxxn8jEtOZg", description: "Explore famous trails like the Mist Trail and John Muir Trail with our expert guides leading the way.", link: "#" },
-    { title: "Mariposa Grove Tour", imageSrc: "https://lh3.googleusercontent.com/aida-public/AB6AXuBELK7VvPN2AxkfYhe4im9vNy9b2M7ehxuMV8FZc64xpaX4yuiKf8a3GZVOxoDK0uDPxGYds97pwqKKVBB-IGO_JuS9MfG6McZE5q4BC_tVC8xblHlxdYGg9NL1Gp8PIu5psFIl-ffHy6Dke4Ai7sXPCk6YVIme7hOe6ncolNyASx9nCOc8MNTDDFdpP5J6TCFls6jK-P8jBMaa2uMWrXURZYvE5Dc8Cs71oOSoNSOQWNahdXzZugGagy_2nR2lbcDpAcOULWU-gnw", description: "Stand in awe of the ancient Giant Sequoias, some of the largest living things on Earth.", link: "#" },
-    { title: "Merced River Boating", imageSrc: "https://lh3.googleusercontent.com/aida-public/AB6AXuAI985wQnmGbBerrBObDQEhdrSvemuHnOgd5PVxn2IVftqWwW6JdrluxERxAF1zokbF2Iy9rWVvPncqI_AEgG_KpB5iDM2sUELxx2WzhNK--z8NFqwoo-EH3wr7LdTGU1PPheW2oV1u7s-Abfpurank3qq8vpcnrHdm9n2cdwEC3kxh9IqO-wcs5gY_ogYGpPOmeBcra7G7jnsC6_r-ncixmBHpsDTFysK6FMZByOnk110_CPFFXxzHOwOAqpVSwnyzuJhgOGshuts", description: "Enjoy a relaxing float or an exciting paddle down the scenic Merced River, offering unique views.", link: "#" },
+    { 
+      title: "Guided Yosemite Hikes", 
+      imageSrc: "https://lh3.googleusercontent.com/aida-public/AB6AXuBk3h0o_SBKzKHEP6XWEAz0NKEHFfBYHFQJM3PwfTOhPlPjtoDJ7Wrt62hxM-urwSB1BkQ66ydYDmin_dru9eeUeBsd46a2O4-Ly7lnQtgmK9mSLWhNGPHkH3DeXsdFgtT-O9sPl3UFY-qF7Irt4YcXzSvCxglTnvl7H1Cvti7u5GuMChs8rjbuOl6zJqoAUeW19L_7MTGO_PiKjs6f6MplWDZ-i-7gYyindiyXAQRR8U6JhMsRMK68AWz3VlYT3he4Sxxn8jEtOZg", 
+      description: "Explore famous trails like the Mist Trail and John Muir Trail with our expert guides leading the way.", 
+      link: "#",
+      duration: "4-6 Hours",
+      schedule: "Daily, 8:00 AM"
+    },
+    { 
+      title: "Mariposa Grove Tour", 
+      imageSrc: "https://lh3.googleusercontent.com/aida-public/AB6AXuBELK7VvPN2AxkfYhe4im9vNy9b2M7ehxuMV8FZc64xpaX4yuiKf8a3GZVOxoDK0uDPxGYds97pwqKKVBB-IGO_JuS9MfG6McZE5q4BC_tVC8xblHlxdYGg9NL1Gp8PIu5psFIl-ffHy6Dke4Ai7sXPCk6YVIme7hOe6ncolNyASx9nCOc8MNTDDFdpP5J6TCFls6jK-P8jBMaa2uMWrXURZYvE5Dc8Cs71oOSoNSOQWNahdXzZugGagy_2nR2lbcDpAcOULWU-gnw", 
+      description: "Stand in awe of the ancient Giant Sequoias, some of the largest living things on Earth.", 
+      link: "#",
+      duration: "3 Hours",
+      schedule: "Tue & Thu, 10:00 AM"
+    },
+    { 
+      title: "Merced River Boating", 
+      imageSrc: "https://lh3.googleusercontent.com/aida-public/AB6AXuAI985wQnmGbBerrBObDQEhdrSvemuHnOgd5PVxn2IVftqWwW6JdrluxERxAF1zokbF2Iy9rWVvPncqI_AEgG_KpB5iDM2sUELxx2WzhNK--z8NFqwoo-EH3wr7LdTGU1PPheW2oV1u7s-Abfpurank3qq8vpcnrHdm9n2cdwEC3kxh9IqO-wcs5gY_ogYGpPOmeBcra7G7jnsC6_r-ncixmBHpsDTFysK6FMZByOnk110_CPFFXxzHOwOAqpVSwnyzuJhgOGshuts", 
+      description: "Enjoy a relaxing float or an exciting paddle down the scenic Merced River, offering unique views.", 
+      link: "#",
+      duration: "2 Hours",
+      schedule: "Afternoons, 2:00 PM"
+    },
   ],
+  transportation: {
+    serviceType: "Private Transfer & Shuttle",
+    vehicleType: "Luxury Mercedes Sprinter Van",
+    schedule: "Daily pickups at 8:30 AM",
+    duration: "Varies by destination (30-60 mins average)",
+    pickupLocation: "Fresno Yosemite International Airport (FAT)",
+    dropLocation: "Cozy Mountain Lodge (Main Entrance)",
+    note: "All vehicles are climate-controlled and feature complimentary bottled water and Wi-Fi."
+  },
   reviews: [
     { name: "Sonia Bennett", avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuB0M51dZaL9rea-iZaCq9vOuxMAz-GBKArzB6IdIbeSmXqLskxZyFotBITZ4NKFLydAGgZjkSZg7nBUhCnR14EETzBKlrh85a-U2ViMl1IcuCfp1A34cKbX3DqgazEgivViWLmZSNaOF4xnEPggHXXLBO9SLvY2xoBQZbQcLYWgdw8W_h29c1YcX2Wmh81HLSX51xtk7ks08sKPYnPNA7XxfFP2YQCuH9QetIcgH1LRFIFS8U_ITmTAO6y4WppH0HyHbw5GMiA4NlA", rating: 5, text: "Absolutely breathtaking! The views were stunning, and the hike was challenging but rewarding. Our guide, Alex, was knowledgeable and made the experience even better." },
     { name: "Mark Johnson", avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuAdy9-x0X45synRE6hmdoPVyvT8LAPSUykcOfsrGRf_AzHKjliET8Mr6IMFtkteyWvBym0KGxJn6sWfSPyIz3BNFR2IwuETyibhz82E9Pt0bDVE5LSzdfJBy06i8Otu7DCZBwmL7MQ8fvAZtGpcmmkiUlxOl2KbFtZxa5HNRL5hNr7FKSq_5_2-Pu-MAZqJAJrennTILxFmlwbpX_yAsoyJkFI8TudGpYpVVCjpLYMzN9i3GvFD3RAqrlvoIbnBSGqyHltN3XBtjJM", rating: 4, text: "Great trip overall. The hotel was comfortable and the transportation was seamless. Wish we had more time at Glacier Point." },
@@ -76,7 +107,6 @@ const PackageDetailPage = () => {
   // --- Hotel Details Section ---
   const HotelDetails = () => {
     const hotelImages = PACKAGE_DATA.gallery.thumbnails;
-    // Use index instead of the string URL for easier navigation logic
     const [hotelIdx, setHotelIdx] = useState(0);
   
     const nextHotelImg = () => {
@@ -97,15 +127,12 @@ const PackageDetailPage = () => {
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            {/* Main Hotel Image Carousel */}
             <div className="relative group overflow-hidden rounded-lg bg-gray-800">
               <img 
                 alt="A cozy hotel room" 
                 className="w-full h-64 object-cover transition-all duration-500" 
                 src={hotelImages[hotelIdx]} 
               />
-              
-              {/* Interactive Overlay & Buttons */}
               <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-between px-2">
                 <button 
                   onClick={prevHotelImg}
@@ -120,14 +147,10 @@ const PackageDetailPage = () => {
                   <MaterialIcon name="arrow_forward_ios" className="text-3xl" />
                 </button>
               </div>
-              
-              {/* Image Counter Badge */}
               <div className="absolute bottom-2 right-2 bg-black/60 px-2 py-1 rounded text-xs text-white">
                 {hotelIdx + 1} / {hotelImages.length}
               </div>
             </div>
-  
-            {/* Thumbnails */}
             <div className="flex space-x-2 mt-2">
               {hotelImages.map((src, index) => (
                 <div 
@@ -146,8 +169,6 @@ const PackageDetailPage = () => {
               ))}
             </div>
           </div>
-  
-          {/* Amenities & Room Details */}
           <div className="flex flex-col justify-between">
             <div>
               <h4 className="text-xl font-semibold mb-3 text-white">Amenities</h4>
@@ -160,7 +181,6 @@ const PackageDetailPage = () => {
                 ))}
               </div>
             </div>
-            
             <div className="bg-white/5 p-4 rounded-lg">
               <h4 className="text-lg font-semibold mb-2 text-white flex items-center">
                 <MaterialIcon name="king_bed" className="mr-2 text-primary" />
@@ -177,7 +197,7 @@ const PackageDetailPage = () => {
     );
   };
 
-  // --- Itinerary Section (Inline for simplicity) ---
+  // --- Itinerary Section ---
   const ItineraryAccordion = () => {
     const itinerary = [
       { day: 1, title: "Arrival & Welcome", content: "Arrival at Fresno Yosemite International Airport (FAT), pickup by our representative, transfer to the hotel. Check-in, relax, and join us for a welcome dinner.", open: true },
@@ -205,7 +225,54 @@ const PackageDetailPage = () => {
     );
   };
 
-  // --- Hosted By Section (Inline for simplicity) ---
+  // --- Transportation Section ---
+  const TransportationSection = () => {
+    const t = PACKAGE_DATA.transportation;
+    return (
+      <section className="bg-card-light dark:bg-card-dark p-6 rounded-lg">
+        <h3 className="text-2xl font-bold mb-6 flex items-center">
+          <MaterialIcon name="directions_bus" className="mr-3 text-primary" />
+          Transportation Services
+        </h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="space-y-4">
+            <div className="flex items-start">
+              <MaterialIcon name="category" className="text-primary mr-3 mt-1" />
+              <div>
+                <p className="text-xs text-subtext-dark uppercase font-bold tracking-wider">Service & Vehicle</p>
+                <p className="text-white">{t.serviceType} — {t.vehicleType}</p>
+              </div>
+            </div>
+            <div className="flex items-start">
+              <MaterialIcon name="history" className="text-primary mr-3 mt-1" />
+              <div>
+                <p className="text-xs text-subtext-dark uppercase font-bold tracking-wider">Schedule & Duration</p>
+                <p className="text-white">{t.schedule} ({t.duration})</p>
+              </div>
+            </div>
+          </div>
+          <div className="space-y-4">
+            <div className="flex items-start">
+              <MaterialIcon name="location_on" className="text-primary mr-3 mt-1" />
+              <div>
+                <p className="text-xs text-subtext-dark uppercase font-bold tracking-wider">Pickup & Drop-off</p>
+                <p className="text-white">From: {t.pickupLocation}</p>
+                <p className="text-white">To: {t.dropLocation}</p>
+              </div>
+            </div>
+            {t.note && (
+              <div className="flex items-start bg-white/5 p-3 rounded-lg border-l-4 border-primary">
+                <MaterialIcon name="info" className="text-primary mr-3 mt-1" />
+                <p className="text-sm text-subtext-dark italic">{t.note}</p>
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
+    );
+  };
+
+  // --- Hosted By Section ---
   const HostedByAgent = () => (
     <section className="bg-card-light dark:bg-card-dark p-6 rounded-lg">
       <h3 className="text-2xl font-bold mb-4">Hosted By</h3>
@@ -237,20 +304,25 @@ const PackageDetailPage = () => {
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
-            {/* === Left Column (Main Content) === */}
             <div className="lg:col-span-2 space-y-8">
 
-              {/* Package Gallery & Summary */}
+              {/* --- PACKAGE QUICK SUMMARY (Uses PACKAGE_DATA.description) --- */}
+              {/* <section className="p-6 rounded-lg  border-primary/20">
+                <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
+                  <h1 className="text-3xl font-bold text-white">{PACKAGE_DATA.title}</h1>
+                  <div className="bg-primary/10 text-primary px-4 py-1.5 rounded-full text-sm font-bold border border-primary/20">
+                    Featured Adventure
+                  </div>
+                </div>
+              </section> */}
+
               <section>
-                {/* Updated Hero Gallery Carousel */}
                 <div className="relative group overflow-hidden rounded-lg mb-6">
                   <img
                     alt="Yosemite Gallery Image"
                     className="w-full h-[500px] object-cover transition-transform duration-500 ease-in-out"
                     src={allImages[activeImgIndex]}
                   />
-                  
-                  {/* Arrows */}
                   <div className="absolute inset-0 flex items-center justify-between px-4 opacity-0 group-hover:opacity-100 transition-opacity">
                     <button 
                       onClick={handlePrev}
@@ -265,10 +337,7 @@ const PackageDetailPage = () => {
                       <MaterialIcon name="arrow_forward_ios" />
                     </button>
                   </div>
-
                   <div className="absolute top-4 right-4 bg-red-500 text-white text-sm font-bold px-3 py-1 rounded-full">20% OFF</div>
-                  
-                  {/* Indicators / Dots */}
                   <div className="absolute bottom-6 left-0 right-0 flex justify-center space-x-2">
                     {allImages.map((_, i) => (
                       <button 
@@ -280,7 +349,6 @@ const PackageDetailPage = () => {
                   </div>
                 </div>
 
-                {/* Summary */}
                 <PackageSummary
                   title={PACKAGE_DATA.title}
                   duration={PACKAGE_DATA.details.duration}
@@ -293,6 +361,9 @@ const PackageDetailPage = () => {
               </section>
 
               <HighlightsGrid highlights={PACKAGE_DATA.highlights} />
+              <p className="text-subtext-dark leading-relaxed">
+                  {PACKAGE_DATA.description}
+                </p>
 
               <InclusionsExclusions
                 inclusions={[
@@ -314,7 +385,10 @@ const PackageDetailPage = () => {
                 <h3 className="text-2xl font-bold mb-4">Activities / Tours Included</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                   {PACKAGE_DATA.activities.map((activity, index) => (
-                    <ActivityCard key={index} {...activity} />
+                    <ActivityCard 
+                      key={index} 
+                      {...activity} 
+                    />
                   ))}
                 </div>
               </section>
@@ -323,20 +397,18 @@ const PackageDetailPage = () => {
 
               <ItineraryAccordion />
 
-              {/* Location & Weather */}
+              <TransportationSection />
+
               <section className="bg-card-light dark:bg-card-dark p-6 rounded-lg">
                 <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
-                  {/* Location */}
                   <div className="md:col-span-3">
                     <h3 className="text-2xl font-bold mb-4">Location Overview</h3>
                     <p className="text-subtext-dark mb-4">Yosemite National Park, California’s Sierra Nevada jewel, is renowned for its giant sequoias and iconic vistas like Tunnel View, Bridalveil Fall, El Capitan, and Half Dome.</p>
                     <img alt="A stylized map showing mountains and a book" className="w-full h-64 object-cover rounded-lg shadow-md" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCm8zzgdyEh3625Gs1DQwMQUjeBvl5v2m2OChMuYX6YdvoUK7F3gfon-LgsTeof4zxDUVAUc8GIQ3jMPVIJBB4HNOYPcM3znFpIk--bzcGU2__ljrgpzXgod6B3eCmRK0m8PZrWQYcGVHNvK24EW3MmFH0_XZP9BgZqtsSVj6TDASToofD3LaqsTQdToo__cHrfaG6atiM4mnwcdL0hBPvIeKvJOTR1W-gF2M4bCbNVjRPRJVPjYeeZpnkMQf7Iw2v_rdnP_ZKAfE0" />
                   </div>
-                  {/* Weather */}
                   <div className="md:col-span-2">
                     <h3 className="text-2xl font-bold mb-4">Weather Forecast</h3>
                     <div className="space-y-3">
-                      {/* Weather Items */}
                       {[
                         { day: 'Mon', icon: 'wb_sunny', color: 'text-yellow-500', condition: 'Sunny', temps: '75°F / 55°F' },
                         { day: 'Tue', icon: 'cloud', color: 'text-blue-400', condition: 'Cloudy', temps: '72°F / 52°F' },
@@ -358,7 +430,6 @@ const PackageDetailPage = () => {
                 </div>
               </section>
 
-              {/* Reviews */}
               <section className="bg-card-light dark:bg-card-dark p-6 rounded-lg">
                 <h3 className="text-2xl font-bold mb-4">Reviews & Ratings</h3>
                 <div className="flex items-center mb-6">
@@ -425,7 +496,6 @@ const PackageDetailPage = () => {
                 </div>
               </section>
 
-              {/* Q&A */}
               <section className="bg-card-light dark:bg-card-dark p-6 rounded-lg">
                 <h3 className="text-2xl font-bold mb-6">Customer Q&A</h3>
                 <div className="space-y-6">
@@ -464,7 +534,6 @@ const PackageDetailPage = () => {
               <HostedByAgent />
             </div>
 
-            {/* === Right Column (Sidebar) === */}
             <div className="lg:col-span-1">
               <BookingSidebar
                 price={PACKAGE_DATA.price.toLocaleString()}
@@ -473,7 +542,6 @@ const PackageDetailPage = () => {
               />
             </div>
 
-            {/* === Full Width Bottom Section (Similar Packages) === */}
             <div className="lg:col-span-3 w-full mt-8">
               <section className="bg-card-light dark:bg-card-dark p-6 rounded-lg">
                 <h3 className="text-2xl font-bold mb-6">Similar / Recommended Packages</h3>

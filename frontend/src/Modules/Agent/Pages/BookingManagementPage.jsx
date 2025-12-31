@@ -24,7 +24,11 @@ const StatusBadge = ({ status }) => {
   );
 };
 
-const BookingsManagementPage = () => {
+// Accept 'role' as a prop (default to 'agent')
+const BookingsManagementPage = ({ role = 'agent' }) => {
+  const isAdmin = role === 'admin';
+  const navigate = useNavigate();
+
   // --- Dummy Data ---
   const [bookings] = useState([
     { id: "BK12345", customer: "Sophia Clark", email: "sophia.clark@email.com", package: "Luxury Beach Getaway", checkIn: "2024-08-15", checkOut: "2024-08-22", amount: 2500, paymentStatus: "Paid", status: "Confirmed" },
@@ -32,22 +36,26 @@ const BookingsManagementPage = () => {
     { id: "BK12347", customer: "Olivia Davis", email: "olivia.davis@email.com", package: "City Exploration", checkIn: "2024-10-10", checkOut: "2024-10-15", amount: 1800, paymentStatus: "Pending", status: "Pending" },
   ]);
 
-  // --- Filter State ---
+  // --- State ---
   const [filters, setFilters] = useState({
     search: "",
     date: "",
     status: "",
     paymentStatus: "",
   });
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   // --- Logic ---
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
     setFilters(prev => ({ ...prev, [name]: value }));
+    setCurrentPage(1); // Reset to first page on filter change
   };
 
   const resetFilters = () => {
     setFilters({ search: "", date: "", status: "", paymentStatus: "" });
+    setCurrentPage(1);
   };
 
   const filteredBookings = useMemo(() => {
@@ -65,20 +73,29 @@ const BookingsManagementPage = () => {
     });
   }, [bookings, filters]);
 
-  const navigate = useNavigate()
+  // Pagination Calculation
+  const totalPages = Math.ceil(filteredBookings.length / itemsPerPage);
+  const paginatedData = filteredBookings.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   const selectClass = "w-full rounded-lg bg-slate-100/50 dark:bg-slate-900/50 border-slate-300 dark:border-slate-700 focus:ring-primary focus:border-primary text-sm transition-all text-slate-700 dark:text-slate-200 py-2.5 px-4";
   const inputClass = "w-full rounded-lg bg-slate-100/50 dark:bg-slate-900/50 border-slate-300 dark:border-slate-700 focus:ring-primary focus:border-primary text-sm transition-all text-slate-700 dark:text-slate-200 py-2.5 px-4";
 
   return (
-    <AgentLayout>
+    <AgentLayout role={role}>
       <main className="flex-1 p-4 md:p-8 animate-[fadeIn_0.4s_ease-out]">
         
         {/* Header Section */}
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-6">
           <div>
-            <h2 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white">Bookings Management</h2>
-            <p className="text-sm text-slate-500 dark:text-slate-400">Manage and oversee all package bookings efficiently.</p>
+            <h2 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white">
+              {isAdmin ? "All Bookings" : "My Bookings"}
+            </h2>
+            <p className="text-sm text-slate-500 dark:text-slate-400">
+              {isAdmin ? "Oversee global booking activity." : "Manage and oversee your package bookings efficiently."}
+            </p>
           </div>
         </div>
 
@@ -143,8 +160,8 @@ const BookingsManagementPage = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-200 dark:divide-slate-800">
-                {filteredBookings.length > 0 ? (
-                  filteredBookings.map((booking) => (
+                {paginatedData.length > 0 ? (
+                  paginatedData.map((booking) => (
                     <tr key={booking.id} className="bg-transparent hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
                       <td className="px-6 py-4 font-medium text-primary whitespace-nowrap">{booking.id}</td>
                       <td className="px-6 py-4">
@@ -157,7 +174,7 @@ const BookingsManagementPage = () => {
                       <td className="px-6 py-4 whitespace-nowrap">{booking.checkIn} / {booking.checkOut}</td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex flex-col gap-1">
-                          <span className="text-slate-900 dark:text-white">${booking.amount.toLocaleString()}</span>
+                          <span className="text-slate-900 dark:text-white font-bold">${booking.amount.toLocaleString()}</span>
                           <span className={`w-fit text-[10px] px-1.5 py-0.5 rounded-full font-bold uppercase ${
                             booking.paymentStatus === 'Paid' ? 'bg-green-100 text-green-700 dark:bg-green-900/30' : 'bg-amber-100 text-amber-700 dark:bg-amber-900/30'
                           }`}>
@@ -170,15 +187,19 @@ const BookingsManagementPage = () => {
                       </td>
                       <td className="px-6 py-4 text-right">
                         <div className="flex items-center justify-end gap-1">
-                          <button onClick={()=>navigate('/agent/bookings/detail')} title="View" className="p-2 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+                          <button 
+                            onClick={() => navigate(isAdmin ? `/admin/bookings/detail` : `/agent/bookings/detail`)} 
+                            title="View" 
+                            className="p-2 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
+                          >
                             <span className="material-symbols-outlined text-lg">visibility</span>
                           </button>
-                          {/* <button title="Edit" className="p-2 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
-                            <span className="material-symbols-outlined text-lg">edit</span>
-                          </button> */}
-                          <button title="Cancel" className="p-2 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 text-red-500 transition-colors">
-                            <span className="material-symbols-outlined text-lg">cancel</span>
-                          </button>
+                          
+                          {!isAdmin && (
+                            <button title="Cancel" className="p-2 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 text-red-500 transition-colors">
+                              <span className="material-symbols-outlined text-lg">cancel</span>
+                            </button>
+                          )}
                         </div>
                       </td>
                     </tr>
@@ -194,15 +215,41 @@ const BookingsManagementPage = () => {
             </table>
           </div>
 
-          {/* Pagination */}
-          <div className="flex flex-col sm:flex-row items-center justify-between p-4 md:p-6 gap-4 border-t border-slate-200 dark:border-slate-800">
-            <span className="text-sm text-slate-500 dark:text-slate-400 text-center sm:text-left">
-              Showing <span className="font-semibold text-slate-800 dark:text-slate-200">1</span> to <span className="font-semibold text-slate-800 dark:text-slate-200">{filteredBookings.length}</span> of <span className="font-semibold text-slate-800 dark:text-slate-200">{bookings.length}</span> Entries
+          {/* Pagination UI */}
+          <div className="flex flex-col sm:flex-row items-center justify-between px-6 py-4 border-t border-slate-200 dark:border-slate-800 gap-4">
+            <span className="text-sm text-slate-500 dark:text-slate-400">
+              Showing <span className="font-semibold text-slate-900 dark:text-white">{filteredBookings.length === 0 ? 0 : (currentPage - 1) * itemsPerPage + 1}</span> to <span className="font-semibold text-slate-900 dark:text-white">{Math.min(currentPage * itemsPerPage, filteredBookings.length)}</span> of <span className="font-semibold text-slate-900 dark:text-white">{filteredBookings.length}</span> entries
             </span>
-            <div className="inline-flex items-center -space-x-px shadow-sm rounded-lg overflow-hidden">
-              <button className="px-3 py-2 text-sm font-medium text-slate-500 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700">Prev</button>
-              <button className="px-3 py-2 text-sm font-medium text-white bg-primary border border-primary">1</button>
-              <button className="px-3 py-2 text-sm font-medium text-slate-500 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700">Next</button>
+            <div className="flex items-center gap-2">
+              <button 
+                disabled={currentPage === 1}
+                onClick={() => setCurrentPage(prev => prev - 1)}
+                className="p-2 rounded-lg border border-slate-300 dark:border-slate-700 disabled:opacity-50 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-slate-600 dark:text-slate-400"
+              >
+                <span className="material-symbols-outlined text-base">chevron_left</span>
+              </button>
+              
+              {totalPages > 0 && [...Array(totalPages)].map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => setCurrentPage(i + 1)}
+                  className={`w-9 h-9 text-sm font-bold rounded-lg transition-all ${
+                    currentPage === i + 1 
+                    ? 'bg-primary text-white shadow-md' 
+                    : 'hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400'
+                  }`}
+                >
+                  {i + 1}
+                </button>
+              ))}
+
+              <button 
+                disabled={currentPage === totalPages || totalPages === 0}
+                onClick={() => setCurrentPage(prev => prev + 1)}
+                className="p-2 rounded-lg border border-slate-300 dark:border-slate-700 disabled:opacity-50 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-slate-600 dark:text-slate-400"
+              >
+                <span className="material-symbols-outlined text-base">chevron_right</span>
+              </button>
             </div>
           </div>
         </div>
