@@ -13,9 +13,13 @@ const HeroSection = () => {
 
     const query = new URLSearchParams();
 
+    // These keys match the qSearch, qDate, and qPrice logic in your PackagesPage
     if (search) query.append("search", search);
     if (date) query.append("date", date);
-    if (budget) query.append("budget", budget);
+    
+    // If budget is selected, we pass it as a range (e.g., 500-1000) 
+    // which your PackagesPage .split("-") logic will handle
+    if (budget) query.append("price", budget);
 
     navigate(`/packages?${query.toString()}`);
   };
@@ -36,7 +40,7 @@ const HeroSection = () => {
         </h1>
 
         <p className="text-base md:text-xl mb-6 md:mb-8 text-slate-300">
-          Find your next adventure with us!
+          Discover handpicked destinations at the best prices.
         </p>
 
         {/* Search Box */}
@@ -53,8 +57,8 @@ const HeroSection = () => {
               <input
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 rounded-lg bg-card-dark/80 text-text-dark border-transparent focus:ring-2 focus:ring-primary"
-                placeholder="Destination / Keyword"
+                className="w-full pl-10 pr-4 py-3 rounded-lg bg-gray-800/80 text-white border-transparent focus:ring-2 focus:ring-primary outline-none"
+                placeholder="Where to?"
                 type="text"
               />
             </div>
@@ -67,29 +71,32 @@ const HeroSection = () => {
               <input
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 rounded-lg bg-card-dark/80 text-text-dark border-transparent focus:ring-2 focus:ring-primary"
-                placeholder="Travel Date"
+                className="w-full pl-10 pr-4 py-3 rounded-lg bg-gray-800/80 text-white border-transparent focus:ring-2 focus:ring-primary outline-none"
                 type="date"
               />
             </div>
 
-            {/* Budget Field */}
+            {/* Budget Field - Changed to Select for better UX */}
             <div className="relative w-full">
               <span className="material-icons absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
                 attach_money
               </span>
-              <input
+              <select
                 value={budget}
                 onChange={(e) => setBudget(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 rounded-lg bg-card-dark/80 text-text-dark border-transparent focus:ring-2 focus:ring-primary"
-                placeholder="Budget Range"
-                type="text"
-              />
+                className="w-full pl-10 pr-4 py-3 rounded-lg bg-gray-800/80 text-white border-transparent focus:ring-2 focus:ring-primary outline-none appearance-none"
+              >
+                <option value="">Any Budget</option>
+                <option value="0-500">Under $500</option>
+                <option value="500-1000">$500 - $1,000</option>
+                <option value="1000-2000">$1,000 - $2,000</option>
+                <option value="2000-5000">$2,000+</option>
+              </select>
             </div>
 
             {/* Search Button */}
             <button
-              className="w-full md:w-auto px-6 py-3 bg-primary text-white font-semibold rounded-lg hover:opacity-90 transition-opacity flex items-center justify-center gap-2"
+              className="w-full md:w-auto px-6 py-3 bg-primary text-white font-semibold rounded-lg hover:bg-primary/90 transition-all flex items-center justify-center gap-2"
               type="submit"
             >
               <span className="material-icons">search</span> Search
@@ -97,17 +104,13 @@ const HeroSection = () => {
           </form>
         </div>
 
-        {/* Buttons */}
+        {/* Action Buttons */}
         <div className="mt-6 md:mt-8 flex flex-col md:flex-row justify-center gap-4">
           <button
             onClick={() => navigate("/packages")}
-            className="px-8 py-3 bg-primary text-white font-semibold rounded-lg hover:opacity-90 transition-opacity"
+            className="px-8 py-3 bg-primary text-white font-semibold rounded-lg hover:bg-primary/90 transition-all shadow-lg"
           >
-            ✨ Discover Packages
-          </button>
-
-          <button className="px-8 py-3 bg-slate-100/20 backdrop-blur-sm text-white font-semibold rounded-lg hover:bg-slate-100/30 transition-colors">
-            🧭 Start Planning
+            ✨ Discover All Packages
           </button>
         </div>
       </div>

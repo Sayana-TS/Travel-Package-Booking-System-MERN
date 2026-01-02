@@ -15,7 +15,6 @@ const CONFIRMATION_DATA = {
     totalPrice: "$1,500 (Includes taxes and fees)",
     breadcrumbPath: [
         { label: 'Home', href: '/' },
-        { label: 'Packages', href: '#' },
         { label: 'Mountain Escape', href: '/packageDetail' },
         { label: 'Booking', href: '/booking' },
     ]

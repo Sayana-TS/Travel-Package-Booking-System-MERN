@@ -79,7 +79,7 @@ const AgentLayout = ({ children, role = "agent" }) => {
   icon="support_agent" 
   label={(isSidebarOpen || isMobile) ? "Support" : ""} 
 />
-            <NavItem to="/logout" icon="logout" label={(isSidebarOpen || isMobile) ? "Logout" : ""} color="text-red-400 hover:bg-red-400/10" />
+            <NavItem to={isAgent ? "/agent/login" : "/admin/login"} icon="logout" label={(isSidebarOpen || isMobile) ? "Logout" : ""} color="text-red-400 hover:bg-red-400/10" />
           </div>
         </div>
       </aside>

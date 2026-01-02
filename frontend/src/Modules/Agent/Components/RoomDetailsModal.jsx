@@ -21,6 +21,10 @@ const RoomDetailsModal = ({ isOpen, onClose, roomId }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState(initialRoomState);
   
+  // Amenity Modal State
+  const [isAmenityModalOpen, setIsAmenityModalOpen] = useState(false);
+  const [newAmenityName, setNewAmenityName] = useState("");
+  
   const fileInputRef = useRef(null);
 
   useEffect(() => {
@@ -72,11 +76,12 @@ const RoomDetailsModal = ({ isOpen, onClose, roomId }) => {
     setFormData({ ...formData, amenities: updatedAmenities });
   };
 
-  const handleAddAmenity = () => {
-    const label = prompt("Enter amenity name:");
-    if (label) {
-      const newAmenity = { icon: 'star', label: label };
+  const handleConfirmAmenity = () => {
+    if (newAmenityName.trim()) {
+      const newAmenity = { icon: 'star', label: newAmenityName.trim() };
       setFormData({ ...formData, amenities: [...formData.amenities, newAmenity] });
+      setNewAmenityName("");
+      setIsAmenityModalOpen(false);
     }
   };
 
@@ -147,7 +152,6 @@ const RoomDetailsModal = ({ isOpen, onClose, roomId }) => {
               </div>
               
               <div className="flex items-center gap-2">
-                {/* Only show Preview/Edit toggle if room already exists */}
                 {roomId && (
                     <button 
                     onClick={() => setIsEditing(!isEditing)}
@@ -238,7 +242,7 @@ const RoomDetailsModal = ({ isOpen, onClose, roomId }) => {
                     </div>
                   ))}
                   {isEditing && (
-                    <button onClick={handleAddAmenity} className="flex items-center gap-2 px-4 py-2 rounded-lg border border-dashed border-primary/40 text-primary hover:bg-primary/5">
+                    <button onClick={() => setIsAmenityModalOpen(true)} className="flex items-center gap-2 px-4 py-2 rounded-lg border border-dashed border-primary/40 text-primary hover:bg-primary/5">
                       <span className="material-symbols-outlined text-xl">add</span>
                       <span className="text-sm font-bold">Add Amenity</span>
                     </button>
@@ -298,6 +302,38 @@ const RoomDetailsModal = ({ isOpen, onClose, roomId }) => {
           </>
         )}
       </div>
+
+      {/* Amenity Input Modal */}
+      {isAmenityModalOpen && (
+        <div className="fixed inset-0 z-[110] flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setIsAmenityModalOpen(false)} />
+          <div className="relative w-full max-w-sm bg-white dark:bg-background-dark p-6 rounded-xl shadow-2xl border border-primary/20">
+            <h4 className="text-lg font-bold text-gray-900 dark:text-white mb-4">Add Amenity</h4>
+            <input 
+              autoFocus
+              className={inputClass} 
+              placeholder="e.g. Private Balcony" 
+              value={newAmenityName} 
+              onChange={(e) => setNewAmenityName(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && handleConfirmAmenity()}
+            />
+            <div className="flex justify-end gap-3 mt-6">
+              <button 
+                onClick={() => setIsAmenityModalOpen(false)} 
+                className="text-sm font-bold text-gray-500 hover:text-gray-900 dark:hover:text-white"
+              >
+                Cancel
+              </button>
+              <button 
+                onClick={handleConfirmAmenity}
+                className="px-4 py-2 text-sm font-bold text-white bg-primary rounded-lg hover:brightness-110"
+              >
+                Add
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

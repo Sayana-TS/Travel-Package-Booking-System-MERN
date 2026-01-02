@@ -83,8 +83,7 @@ const AdminDashboard = () => {
                     {dashboardData.activities.map((item) => (
                       <tr 
                         key={item.id}
-                        onClick={() => navigate(`/admin/packages/${item.id}`)}
-                        className="hover:bg-white/[0.02] transition-colors cursor-pointer group"
+                        className="hover:bg-white/[0.02] transition-colors group"
                       >
                         <td className="px-6 py-4">
                           <p className="text-sm font-bold text-white group-hover:text-primary transition-colors">{item.agent}</p>

@@ -2,39 +2,9 @@ import React, { useState } from 'react';
 import UserLayout from '../Layouts/UserLayout';
 import Breadcrumb from '../../../Shared/Components/Breadcrumb';
 
-// --- MOCK DATA ---
+// --- BREADCRUMB CONFIG ---
 const BREADCRUMB_PATH = [
     { label: 'Home', href: '/' },
-];
-
-const MOCK_REQUESTS = [
-    {
-        id: '12345',
-        subject: 'Issue with booking payment',
-        status: 'Open',
-        date: '2023-08-15',
-        originalMessage: 'I am having trouble completing my booking for the Yosemite trip. The payment is not going through.',
-        replies: [
-            { sender: 'Agent', time: '2 hours ago', message: 'We are looking into this issue. Please provide your booking reference number.', avatar: 'A' },
-            { sender: 'You', time: '1 hour ago', message: 'My booking reference number is XYZ123.', avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDKhYh3on37irl0VMhl_EMM-iif5pLksmVXncWl3NsM2v3koZrlTX6CM6VA4AwUQCrFOkkr6GiA3sGotWtHF0VUgZR9SKi9KyjDR3aPFrA2xGTYPGZ7j2796wo560IZoMnQPUeopTViARPfv8wN1GG7Q6h_Z_KhkBq_V06T1aE8opA6WZCcwO8vbmUS-7EizgSkL57LN_FrW4_Ui0InKFzAhHxaWZTIANFwAVSwNNnHXgEm1p8YnseNxLHgguoLY1zKYem-DElTkek' },
-        ],
-    },
-    {
-        id: '67890',
-        subject: 'Payment inquiry',
-        status: 'Pending',
-        date: '2023-08-10',
-        originalMessage: 'Just confirming if my recent payment went through.',
-        replies: [],
-    },
-    {
-        id: '11223',
-        subject: 'Feedback on recent trip',
-        status: 'Resolved',
-        date: '2023-08-05',
-        originalMessage: 'The local guide on the recent trip was excellent!',
-        replies: [],
-    },
 ];
 
 // ===================================================================
@@ -45,7 +15,7 @@ const ContactForm = () => {
     const [formData, setFormData] = useState({
         subject: '',
         category: '',
-        bookingId: '', // Added Booking ID state
+        bookingId: '', 
         description: '',
     });
 
@@ -55,9 +25,17 @@ const ContactForm = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Handle form submission logic here (API call, etc.)
         console.log('Submitting new support ticket with data:', formData);
-        // Add API call here
+        
+        // Clear inputs after submission
+        setFormData({
+            subject: '',
+            category: '',
+            bookingId: '',
+            description: '',
+        });
+        
+        alert("Ticket submitted successfully!");
     };
 
     return (
@@ -101,7 +79,7 @@ const ContactForm = () => {
                     </select>
                 </div>
 
-                {/* NEW FIELD: Booking ID (Optional) */}
+                {/* Booking ID Field */}
                 <div>
                     <label className="block text-sm font-medium mb-2 text-gray-900 dark:text-white" htmlFor="bookingId">Booking ID <span className="text-gray-500 dark:text-subtext-dark font-normal">(Optional)</span></label>
                     <input 
@@ -142,7 +120,7 @@ const ContactForm = () => {
 };
 
 // ===================================================================
-// Sub-Component 2: RequestAccordionItem (Unchanged)
+// Sub-Component 2: RequestAccordionItem
 // ===================================================================
 
 const getStatusClasses = (status) => {
@@ -158,13 +136,19 @@ const getStatusClasses = (status) => {
     }
 };
 
-const RequestAccordionItem = ({ request }) => {
+const RequestAccordionItem = ({ request, onReply }) => {
     const [isOpen, setIsOpen] = useState(false);
+    const [replyText, setReplyText] = useState('');
 
-    const handleReply = (e) => {
+    const handleReplySubmit = (e) => {
         e.preventDefault();
-        // Handle reply submission logic
-        console.log(`Submitting reply for ticket ${request.id}`);
+        if (!replyText.trim()) return;
+
+        // Call the parent function to update UI
+        onReply(request.id, replyText);
+        
+        // Clear input
+        setReplyText('');
     };
 
     return (
@@ -188,10 +172,7 @@ const RequestAccordionItem = ({ request }) => {
                 </span>
             </button>
             
-            {/* Accordion Content */}
-            <div 
-                className={`overflow-hidden transition-all duration-500 ease-in-out ${isOpen ? 'max-h-[1000px]' : 'max-h-0'}`}
-            >
+            <div className={`overflow-hidden transition-all duration-500 ease-in-out ${isOpen ? 'max-h-[2000px]' : 'max-h-0'}`}>
                 <div className="border-t border-gray-200 dark:border-white/10 p-6 space-y-6">
                     <div>
                         <p className="font-semibold mb-2 text-gray-900 dark:text-white">Original Message:</p>
@@ -207,7 +188,7 @@ const RequestAccordionItem = ({ request }) => {
                                         className="size-8 rounded-full flex-shrink-0 flex items-center justify-center font-bold text-sm"
                                         style={{
                                             backgroundImage: reply.sender === 'You' ? `url(${reply.avatar})` : 'none',
-                                            backgroundColor: reply.sender === 'You' ? 'transparent' : 'rgba(5, 107, 209, 0.1)', // Primary blue with opacity
+                                            backgroundColor: reply.sender === 'You' ? 'transparent' : 'rgba(5, 107, 209, 0.1)',
                                             color: reply.sender === 'You' ? 'transparent' : '#056bd1',
                                             backgroundSize: reply.sender === 'You' ? 'cover' : 'initial',
                                             backgroundPosition: 'center',
@@ -231,12 +212,14 @@ const RequestAccordionItem = ({ request }) => {
                             id={`reply-${request.id}`} 
                             placeholder="Enter your reply..." 
                             rows="3"
+                            value={replyText}
+                            onChange={(e) => setReplyText(e.target.value)}
                         />
                         <div className="flex justify-end mt-4">
                             <button 
                                 className="bg-primary text-white font-bold py-2 px-5 rounded-lg hover:opacity-90 transition-opacity" 
                                 type="button" 
-                                onClick={handleReply}
+                                onClick={handleReplySubmit}
                             >
                                 Submit Reply
                             </button>
@@ -248,54 +231,91 @@ const RequestAccordionItem = ({ request }) => {
     );
 };
 
-
 // ===================================================================
-// Main Component: ContactUsPage (Unchanged)
+// Main Component: ContactUsPage
 // ===================================================================
 
 const ContactUsPage = () => {
-    // Current Page Breadcrumb
-    const currentPageBreadcrumb = [
-        ...BREADCRUMB_PATH,
-        { label: 'Help', href: '/help' },
-    ];
+    const [requests, setRequests] = useState([
+        {
+            id: '12345',
+            subject: 'Issue with booking payment',
+            status: 'Open',
+            date: '2023-08-15',
+            originalMessage: 'I am having trouble completing my booking for the Yosemite trip. The payment is not going through.',
+            replies: [
+                { sender: 'Agent', time: '2 hours ago', message: 'We are looking into this issue. Please provide your booking reference number.', avatar: 'A' },
+                { sender: 'You', time: '1 hour ago', message: 'My booking reference number is XYZ123.', avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDKhYh3on37irl0VMhl_EMM-iif5pLksmVXncWl3NsM2v3koZrlTX6CM6VA4AwUQCrFOkkr6GiA3sGotWtHF0VUgZR9SKi9KyjDR3aPFrA2xGTYPGZ7j2796wo560IZoMnQPUeopTViARPfv8wN1GG7Q6h_Z_KhkBq_V06T1aE8opA6WZCcwO8vbmUS-7EizgSkL57LN_FrW4_Ui0InKFzAhHxaWZTIANFwAVSwNNnHXgEm1p8YnseNxLHgguoLY1zKYem-DElTkek' },
+            ],
+        },
+        {
+            id: '67890',
+            subject: 'Payment inquiry',
+            status: 'Pending',
+            date: '2023-08-10',
+            originalMessage: 'Just confirming if my recent payment went through.',
+            replies: [],
+        },
+        {
+            id: '11223',
+            subject: 'Feedback on recent trip',
+            status: 'Resolved',
+            date: '2023-08-05',
+            originalMessage: 'The local guide on the recent trip was excellent!',
+            replies: [],
+        },
+    ]);
+
+    const handleNewReply = (requestId, message) => {
+        setRequests(prevRequests => prevRequests.map(req => {
+            if (req.id === requestId) {
+                return {
+                    ...req,
+                    replies: [
+                        ...req.replies,
+                        {
+                            sender: 'You',
+                            time: 'Just now',
+                            message: message,
+                            avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDKhYh3on37irl0VMhl_EMM-iif5pLksmVXncWl3NsM2v3koZrlTX6CM6VA4AwUQCrFOkkr6GiA3sGotWtHF0VUgZR9SKi9KyjDR3aPFrA2xGTYPGZ7j2796wo560IZoMnQPUeopTViARPfv8wN1GG7Q6h_Z_KhkBq_V06T1aE8opA6WZCcwO8vbmUS-7EizgSkL57LN_FrW4_Ui0InKFzAhHxaWZTIANFwAVSwNNnHXgEm1p8YnseNxLHgguoLY1zKYem-DElTkek'
+                        }
+                    ]
+                };
+            }
+            return req;
+        }));
+    };
+
+    const currentPageBreadcrumb = [...BREADCRUMB_PATH];
 
     return (
         <div className="min-h-screen bg-background-light dark:bg-background-dark font-display text-gray-900 dark:text-white">
             <UserLayout>
-                {/* WIDE CONTAINER FOR BREADCRUMB (max-w-8xl is assumed from previous context) */}
                 <main className="w-full mx-auto max-w-8xl px-4 py-8 sm:px-10">
-                    
-                    {/* Breadcrumb Section */}
                     <div className="mb-8">
-                        <Breadcrumb 
-                            path={currentPageBreadcrumb} 
-                            currentPage="Contact Us"
-                        />
+                        <Breadcrumb path={currentPageBreadcrumb} currentPage="Contact Us" />
                     </div>
 
-                    {/* MAIN CONTENT CONTAINER: max-w-4xl (to match HTML structure) and centered */}
                     <div className="mx-auto w-full max-w-4xl">
-                        
-                        {/* Header */}
                         <div className="mb-12">
                             <h2 className="text-3xl font-bold mb-2 text-gray-900 dark:text-white">Contact Us</h2>
                             <p className="text-gray-500 dark:text-subtext-dark">Have a question or need assistance? Fill out the form below.</p>
                         </div>
 
-                        {/* 1. Contact Form */}
                         <ContactForm />
 
-                        {/* 2. Previous Requests */}
                         <div>
                             <h3 className="text-xl font-bold mb-6 text-gray-900 dark:text-white">Your Requests</h3>
                             <div className="space-y-4">
-                                {MOCK_REQUESTS.map(request => (
-                                    <RequestAccordionItem key={request.id} request={request} />
+                                {requests.map(request => (
+                                    <RequestAccordionItem 
+                                        key={request.id} 
+                                        request={request} 
+                                        onReply={handleNewReply} 
+                                    />
                                 ))}
                             </div>
                         </div>
-
                     </div>
                 </main>
             </UserLayout>

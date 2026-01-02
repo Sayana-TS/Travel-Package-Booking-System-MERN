@@ -18,7 +18,7 @@ const PACKAGE_DATA = {
   description: "Experience the majesty of the High Sierras. This comprehensive 5-day package covers all the essentials—from guided treks beneath the Giant Sequoias to peaceful afternoons by the Merced River. Perfect for families and solo explorers alike seeking a blend of adventure and comfort.",
   price: 1200,
   rating: 4.8,
-  reviewCount: 125,
+  reviewCount: 2,
   details: {
     duration: "5 Days / 4 Nights",
     location: "Yosemite, CA",
@@ -39,26 +39,26 @@ const PACKAGE_DATA = {
     { icon: "photo_camera", text: "Scenic Views" }
   ],
   activities: [
-    { 
-      title: "Guided Yosemite Hikes", 
-      imageSrc: "https://lh3.googleusercontent.com/aida-public/AB6AXuBk3h0o_SBKzKHEP6XWEAz0NKEHFfBYHFQJM3PwfTOhPlPjtoDJ7Wrt62hxM-urwSB1BkQ66ydYDmin_dru9eeUeBsd46a2O4-Ly7lnQtgmK9mSLWhNGPHkH3DeXsdFgtT-O9sPl3UFY-qF7Irt4YcXzSvCxglTnvl7H1Cvti7u5GuMChs8rjbuOl6zJqoAUeW19L_7MTGO_PiKjs6f6MplWDZ-i-7gYyindiyXAQRR8U6JhMsRMK68AWz3VlYT3he4Sxxn8jEtOZg", 
-      description: "Explore famous trails like the Mist Trail and John Muir Trail with our expert guides leading the way.", 
+    {
+      title: "Guided Yosemite Hikes",
+      imageSrc: "https://lh3.googleusercontent.com/aida-public/AB6AXuBk3h0o_SBKzKHEP6XWEAz0NKEHFfBYHFQJM3PwfTOhPlPjtoDJ7Wrt62hxM-urwSB1BkQ66ydYDmin_dru9eeUeBsd46a2O4-Ly7lnQtgmK9mSLWhNGPHkH3DeXsdFgtT-O9sPl3UFY-qF7Irt4YcXzSvCxglTnvl7H1Cvti7u5GuMChs8rjbuOl6zJqoAUeW19L_7MTGO_PiKjs6f6MplWDZ-i-7gYyindiyXAQRR8U6JhMsRMK68AWz3VlYT3he4Sxxn8jEtOZg",
+      description: "Explore famous trails like the Mist Trail and John Muir Trail with our expert guides leading the way.",
       link: "#",
       duration: "4-6 Hours",
       schedule: "Daily, 8:00 AM"
     },
-    { 
-      title: "Mariposa Grove Tour", 
-      imageSrc: "https://lh3.googleusercontent.com/aida-public/AB6AXuBELK7VvPN2AxkfYhe4im9vNy9b2M7ehxuMV8FZc64xpaX4yuiKf8a3GZVOxoDK0uDPxGYds97pwqKKVBB-IGO_JuS9MfG6McZE5q4BC_tVC8xblHlxdYGg9NL1Gp8PIu5psFIl-ffHy6Dke4Ai7sXPCk6YVIme7hOe6ncolNyASx9nCOc8MNTDDFdpP5J6TCFls6jK-P8jBMaa2uMWrXURZYvE5Dc8Cs71oOSoNSOQWNahdXzZugGagy_2nR2lbcDpAcOULWU-gnw", 
-      description: "Stand in awe of the ancient Giant Sequoias, some of the largest living things on Earth.", 
+    {
+      title: "Mariposa Grove Tour",
+      imageSrc: "https://lh3.googleusercontent.com/aida-public/AB6AXuBELK7VvPN2AxkfYhe4im9vNy9b2M7ehxuMV8FZc64xpaX4yuiKf8a3GZVOxoDK0uDPxGYds97pwqKKVBB-IGO_JuS9MfG6McZE5q4BC_tVC8xblHlxdYGg9NL1Gp8PIu5psFIl-ffHy6Dke4Ai7sXPCk6YVIme7hOe6ncolNyASx9nCOc8MNTDDFdpP5J6TCFls6jK-P8jBMaa2uMWrXURZYvE5Dc8Cs71oOSoNSOQWNahdXzZugGagy_2nR2lbcDpAcOULWU-gnw",
+      description: "Stand in awe of the ancient Giant Sequoias, some of the largest living things on Earth.",
       link: "#",
       duration: "3 Hours",
       schedule: "Tue & Thu, 10:00 AM"
     },
-    { 
-      title: "Merced River Boating", 
-      imageSrc: "https://lh3.googleusercontent.com/aida-public/AB6AXuAI985wQnmGbBerrBObDQEhdrSvemuHnOgd5PVxn2IVftqWwW6JdrluxERxAF1zokbF2Iy9rWVvPncqI_AEgG_KpB5iDM2sUELxx2WzhNK--z8NFqwoo-EH3wr7LdTGU1PPheW2oV1u7s-Abfpurank3qq8vpcnrHdm9n2cdwEC3kxh9IqO-wcs5gY_ogYGpPOmeBcra7G7jnsC6_r-ncixmBHpsDTFysK6FMZByOnk110_CPFFXxzHOwOAqpVSwnyzuJhgOGshuts", 
-      description: "Enjoy a relaxing float or an exciting paddle down the scenic Merced River, offering unique views.", 
+    {
+      title: "Merced River Boating",
+      imageSrc: "https://lh3.googleusercontent.com/aida-public/AB6AXuAI985wQnmGbBerrBObDQEhdrSvemuHnOgd5PVxn2IVftqWwW6JdrluxERxAF1zokbF2Iy9rWVvPncqI_AEgG_KpB5iDM2sUELxx2WzhNK--z8NFqwoo-EH3wr7LdTGU1PPheW2oV1u7s-Abfpurank3qq8vpcnrHdm9n2cdwEC3kxh9IqO-wcs5gY_ogYGpPOmeBcra7G7jnsC6_r-ncixmBHpsDTFysK6FMZByOnk110_CPFFXxzHOwOAqpVSwnyzuJhgOGshuts",
+      description: "Enjoy a relaxing float or an exciting paddle down the scenic Merced River, offering unique views.",
       link: "#",
       duration: "2 Hours",
       schedule: "Afternoons, 2:00 PM"
@@ -90,11 +90,64 @@ const PACKAGE_DATA = {
 };
 
 const PackageDetailPage = () => {
+  const [packageData, setPackageData] = useState(PACKAGE_DATA);
   const [showReviewForm, setShowReviewForm] = useState(false);
-  
+
+  // Add these for the form inputs
+  const [userRating, setUserRating] = useState(0);
+  const [hoverRating, setHoverRating] = useState(0);
+  const [reviewText, setReviewText] = useState("");
+
+  const [questionText, setQuestionText] = useState("");
   // --- Carousel State & Logic ---
   const [activeImgIndex, setActiveImgIndex] = useState(0);
   const allImages = [PACKAGE_DATA.gallery.mainImage, ...PACKAGE_DATA.gallery.thumbnails];
+
+  const handlePostReview = (e) => {
+    e.preventDefault();
+    if (userRating === 0) return alert("Please select a rating!");
+
+    const newReview = {
+      name: "You",
+      avatar: "https://ui-avatars.com/api/?name=User&background=056bd1&color=fff",
+      rating: userRating,
+      text: reviewText,
+    };
+
+    const updatedReviews = [newReview, ...packageData.reviews];
+    const newAverage = updatedReviews.reduce((acc, r) => acc + r.rating, 0) / updatedReviews.length;
+
+    setPackageData({
+      ...packageData,
+      reviews: updatedReviews,
+      reviewCount: updatedReviews.length,
+      rating: newAverage,
+    });
+
+    // Reset form
+    setReviewText("");
+    setUserRating(0);
+    setShowReviewForm(false);
+  };
+
+  const handlePostQuestion = (e) => {
+    e.preventDefault();
+    if (!questionText.trim()) return;
+  
+    const newQna = {
+      name: "User", // The person asking
+      avatar: "https://ui-avatars.com/api/?name=User&background=056bd1&color=fff",
+      question: questionText,
+      answer: "Pending response from agent...", // Default text for new questions
+    };
+  
+    setPackageData({
+      ...packageData,
+      qna: [...packageData.qna, newQna], // Adds the new question to the list
+    });
+  
+    setQuestionText(""); // Clear the box
+  };
 
   const handleNext = () => {
     setActiveImgIndex((prev) => (prev === allImages.length - 1 ? 0 : prev + 1));
@@ -108,39 +161,39 @@ const PackageDetailPage = () => {
   const HotelDetails = () => {
     const hotelImages = PACKAGE_DATA.gallery.thumbnails;
     const [hotelIdx, setHotelIdx] = useState(0);
-  
+
     const nextHotelImg = () => {
       setHotelIdx((prev) => (prev === hotelImages.length - 1 ? 0 : prev + 1));
     };
-  
+
     const prevHotelImg = () => {
       setHotelIdx((prev) => (prev === 0 ? hotelImages.length - 1 : prev - 1));
     };
-  
+
     return (
       <section className="bg-card-light dark:bg-card-dark p-6 rounded-lg border border-white/5">
         <h3 className="text-2xl font-bold mb-4 text-white">Hotel Details: Cozy Mountain Lodge</h3>
         <p className="text-subtext-dark mb-4">
-          Nestled in the heart of Yosemite, offering stunning views and world-class amenities. 
+          Nestled in the heart of Yosemite, offering stunning views and world-class amenities.
           Enjoy comfort and nature at your doorstep.
         </p>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <div className="relative group overflow-hidden rounded-lg bg-gray-800">
-              <img 
-                alt="A cozy hotel room" 
-                className="w-full h-64 object-cover transition-all duration-500" 
-                src={hotelImages[hotelIdx]} 
+              <img
+                alt="A cozy hotel room"
+                className="w-full h-64 object-cover transition-all duration-500"
+                src={hotelImages[hotelIdx]}
               />
               <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-between px-2">
-                <button 
+                <button
                   onClick={prevHotelImg}
                   className="text-white p-2 hover:bg-primary rounded-full transition-colors"
                 >
                   <MaterialIcon name="arrow_back_ios" className="text-3xl translate-x-1" />
                 </button>
-                <button 
+                <button
                   onClick={nextHotelImg}
                   className="text-white p-2 hover:bg-primary rounded-full transition-colors"
                 >
@@ -153,17 +206,16 @@ const PackageDetailPage = () => {
             </div>
             <div className="flex space-x-2 mt-2">
               {hotelImages.map((src, index) => (
-                <div 
+                <div
                   key={index}
-                  className={`relative w-1/3 h-16 cursor-pointer rounded-md overflow-hidden transition-all ${
-                    hotelIdx === index ? 'ring-2 ring-primary ring-offset-2 ring-offset-black' : 'opacity-50 hover:opacity-100'
-                  }`}
+                  className={`relative w-1/3 h-16 cursor-pointer rounded-md overflow-hidden transition-all ${hotelIdx === index ? 'ring-2 ring-primary ring-offset-2 ring-offset-black' : 'opacity-50 hover:opacity-100'
+                    }`}
                   onClick={() => setHotelIdx(index)}
                 >
-                  <img 
-                    alt={`Hotel thumbnail ${index + 1}`} 
-                    className="w-full h-full object-cover" 
-                    src={src} 
+                  <img
+                    alt={`Hotel thumbnail ${index + 1}`}
+                    className="w-full h-full object-cover"
+                    src={src}
                   />
                 </div>
               ))}
@@ -187,7 +239,7 @@ const PackageDetailPage = () => {
                 Room Details
               </h4>
               <p className="text-sm text-subtext-dark leading-relaxed">
-                Standard rooms with double beds, mountain-view balconies, and climate control. 
+                Standard rooms with double beds, mountain-view balconies, and climate control.
                 Options to upgrade to Deluxe or Suite available.
               </p>
             </div>
@@ -324,13 +376,13 @@ const PackageDetailPage = () => {
                     src={allImages[activeImgIndex]}
                   />
                   <div className="absolute inset-0 flex items-center justify-between px-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <button 
+                    <button
                       onClick={handlePrev}
                       className="p-2 bg-black/40 hover:bg-primary text-white rounded-full transition-colors"
                     >
                       <MaterialIcon name="arrow_back_ios" className="translate-x-1" />
                     </button>
-                    <button 
+                    <button
                       onClick={handleNext}
                       className="p-2 bg-black/40 hover:bg-primary text-white rounded-full transition-colors"
                     >
@@ -340,8 +392,8 @@ const PackageDetailPage = () => {
                   <div className="absolute top-4 right-4 bg-red-500 text-white text-sm font-bold px-3 py-1 rounded-full">20% OFF</div>
                   <div className="absolute bottom-6 left-0 right-0 flex justify-center space-x-2">
                     {allImages.map((_, i) => (
-                      <button 
-                        key={i} 
+                      <button
+                        key={i}
                         onClick={() => setActiveImgIndex(i)}
                         className={`w-2.5 h-2.5 rounded-full transition-all ${i === activeImgIndex ? 'bg-primary w-6' : 'bg-white/50'}`}
                       ></button>
@@ -362,8 +414,8 @@ const PackageDetailPage = () => {
 
               <HighlightsGrid highlights={PACKAGE_DATA.highlights} />
               <p className="text-subtext-dark leading-relaxed">
-                  {PACKAGE_DATA.description}
-                </p>
+                {PACKAGE_DATA.description}
+              </p>
 
               <InclusionsExclusions
                 inclusions={[
@@ -385,9 +437,9 @@ const PackageDetailPage = () => {
                 <h3 className="text-2xl font-bold mb-4">Activities / Tours Included</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                   {PACKAGE_DATA.activities.map((activity, index) => (
-                    <ActivityCard 
-                      key={index} 
-                      {...activity} 
+                    <ActivityCard
+                      key={index}
+                      {...activity}
                     />
                   ))}
                 </div>
@@ -433,15 +485,15 @@ const PackageDetailPage = () => {
               <section className="bg-card-light dark:bg-card-dark p-6 rounded-lg">
                 <h3 className="text-2xl font-bold mb-4">Reviews & Ratings</h3>
                 <div className="flex items-center mb-6">
-                  <p className="text-4xl font-bold mr-4">{PACKAGE_DATA.rating.toFixed(1)}</p>
+                  <p className="text-4xl font-bold mr-4">{packageData.rating.toFixed(1)}</p>
                   <div>
-                    <StarRating rating={PACKAGE_DATA.rating} />
-                    <p className="text-sm text-subtext-dark">Based on {PACKAGE_DATA.reviewCount} reviews</p>
+                    <StarRating rating={packageData.rating} />
+                    <p className="text-sm text-subtext-dark">Based on {packageData.reviewCount} reviews</p>
                   </div>
                 </div>
                 <div className="border-t border-gray-200 dark:border-border-dark pt-6 space-y-6">
-                  {PACKAGE_DATA.reviews.map((review, index) => (
-                    <div key={index} className="flex items-start space-x-4">
+                  {packageData.reviews.map((review, index) => (
+                    <div key={index} className="flex items-start space-x-4 animate-fadeIn">
                       <img alt={`Avatar of ${review.name}`} className="w-12 h-12 rounded-full object-cover" src={review.avatar} />
                       <div>
                         <p className="font-semibold">{review.name}</p>
@@ -450,7 +502,7 @@ const PackageDetailPage = () => {
                       </div>
                     </div>
                   ))}
-                  <button 
+                  <button
                     className="w-full mt-6 bg-primary/20 text-primary hover:bg-primary hover:text-white font-bold py-2 px-4 rounded-lg transition-colors"
                     onClick={() => setShowReviewForm(prev => !prev)}
                   >
@@ -459,77 +511,110 @@ const PackageDetailPage = () => {
 
                   {showReviewForm && (
                     <div className="mt-6 border border-primary/30 p-4 rounded-lg bg-background-light dark:bg-background-dark">
-                        <h4 className="font-semibold mb-3">Share Your Experience</h4>
-                        <div className="flex items-start space-x-3">
-                            <div className="flex-shrink-0">
-                                <img alt="Your avatar" className="w-10 h-10 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBvrlwqCjrlzqS7F_ybxRTku1r7XVLpt5FkQQnYVE2YrsGh0ELhX7GsQGqpmp-ijY9kdIbwmqaJoS6hjeKTwLRETIW2lwEJPLrX9OqO0DWJ8dFT8-IjkyOabq2HdTMIY30BsI7s4fCl72zEGbeNHUKHoqMTlg80jQh11H6LuRuW8puFYy7f75aVKq6eKxvGZE3tZ5Z4C5Srxq49HJD37Bar5lRKzzCMekIUppdnAfM_o7YAv62gnR_nlAfUNWN7zt7H-aPUIHRAdE4" />
-                            </div>
-                            <div className="flex-grow">
-                                <form className="space-y-3" onSubmit={(e) => e.preventDefault()}>
-                                    <div>
-                                        <label className="text-sm font-medium block mb-1 text-text-light dark:text-white">Your Rating:</label>
-                                        <div className="flex items-center space-x-1 text-yellow-500">
-                                            {[...Array(5)].map((_, i) => (
-                                                <MaterialIcon key={i} name="star" className="cursor-pointer text-2xl hover:text-yellow-400" />
-                                            ))}
-                                        </div>
-                                    </div>
-                                    <textarea 
-                                        className="w-full bg-background-light dark:bg-background-dark border border-gray-300 dark:border-border-dark rounded-lg p-3 focus:ring-primary focus:border-primary transition-colors text-text-light dark:text-white" 
-                                        placeholder="Write your detailed review here..." 
-                                        rows="5"
-                                    ></textarea>
-                                    <div className="flex justify-end">
-                                        <button 
-                                            className="bg-primary text-white font-bold py-2 px-6 rounded-lg hover:bg-primary/90 transition-colors" 
-                                            type="submit"
-                                            onClick={() => setShowReviewForm(false)}
-                                        >
-                                            Post Review
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
+                      <h4 className="font-semibold mb-3">Share Your Experience</h4>
+                      <div className="flex items-start space-x-3">
+                        <div className="flex-shrink-0">
+                          <img alt="Your avatar" className="w-10 h-10 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBvrlwqCjrlzqS7F_ybxRTku1r7XVLpt5FkQQnYVE2YrsGh0ELhX7GsQGqpmp-ijY9kdIbwmqaJoS6hjeKTwLRETIW2lwEJPLrX9OqO0DWJ8dFT8-IjkyOabq2HdTMIY30BsI7s4fCl72zEGbeNHUKHoqMTlg80jQh11H6LuRuW8puFYy7f75aVKq6eKxvGZE3tZ5Z4C5Srxq49HJD37Bar5lRKzzCMekIUppdnAfM_o7YAv62gnR_nlAfUNWN7zt7H-aPUIHRAdE4" />
                         </div>
+                        <div className="flex-grow">
+                          <form className="space-y-3" onSubmit={(e) => e.preventDefault()}>
+                            <div>
+                              <label className="text-sm font-medium block mb-1 text-text-light dark:text-white">Your Rating:</label>
+                              {/* Replace your current Star Div with this */}
+                              <div className="flex items-center space-x-1 text-yellow-500">
+                                {[1, 2, 3, 4, 5].map((star) => (
+                                  <button
+                                    key={star}
+                                    type="button" // Important: prevents form from auto-submitting
+                                    className="focus:outline-none transition-transform hover:scale-110"
+                                    onMouseEnter={() => setHoverRating(star)}
+                                    onMouseLeave={() => setHoverRating(0)}
+                                    onClick={() => setUserRating(star)}
+                                  >
+                                    <MaterialIcon
+                                      name={(hoverRating || userRating) >= star ? "star" : "star_outline"}
+                                      className="text-2xl"
+                                    />
+                                  </button>
+                                ))}
+                              </div>
+
+                              {/* Replace your current Textarea with this */}
+                              <textarea
+                                className="w-full bg-background-light dark:bg-background-dark border border-gray-300 dark:border-border-dark rounded-lg p-3 focus:ring-primary focus:border-primary transition-colors text-text-light dark:text-white"
+                                placeholder="Write your detailed review here..."
+                                rows="5"
+                                value={reviewText}
+                                onChange={(e) => setReviewText(e.target.value)}
+                                required
+                              ></textarea>
+
+                              {/* Replace your current Post Review button with this */}
+                              <button
+                                className="bg-primary text-white font-bold py-2 px-6 rounded-lg hover:bg-primary/90 transition-colors"
+                                type="submit"
+                                onClick={handlePostReview}
+                              >
+                                Post Review
+                              </button>
+                            </div>
+                          </form>
+                        </div>
+                      </div>
                     </div>
                   )}
                 </div>
               </section>
 
               <section className="bg-card-light dark:bg-card-dark p-6 rounded-lg">
-                <h3 className="text-2xl font-bold mb-6">Customer Q&A</h3>
-                <div className="space-y-6">
-                  {PACKAGE_DATA.qna.map((item, index) => (
-                    <div key={index} className="bg-background-light dark:bg-background-dark p-4 rounded-lg">
-                      <div className="flex items-start space-x-3">
-                        <div className="flex-shrink-0">
-                          <img alt="User avatar" className="w-8 h-8 rounded-full" src={item.avatar} />
-                        </div>
-                        <div className="flex-grow">
-                          <p className="font-semibold">{item.question}</p>
-                          <p className="text-sm text-subtext-dark mt-1">{item.answer}</p>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                  <div className="mt-6">
-                    <h4 className="font-semibold mb-3">Ask a Question</h4>
-                    <div className="flex items-start space-x-3">
-                      <div className="flex-shrink-0">
-                        <img alt="Your avatar" className="w-10 h-10 rounded-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBvrlwqCjrlzqS7F_ybxRTku1r7XVLpt5FkQQnYVE2YrsGh0ELhX7GsQGqpmp-ijY9kdIbwmqaJoS6hjeKTwLRETIW2lwEJPLrX9OqO0DWJ8dFT8-IjkyOabq2HdTMIY30BsI7s4fCl72zEGbeNHUKHoqMTlg80jQh11H6LuRuW8puFYy7f75aVKq6eKxvGZE3tZ5Z4C5Srxq49HJD37Bar5lRKzzCMekIUppdnAfM_o7YAv62gnR_nlAfUNWN7zt7H-aPUIHRAdE4" />
-                      </div>
-                      <div className="flex-grow">
-                        <form>
-                          <textarea className="w-full bg-background-light dark:bg-background-dark border border-gray-300 dark:border-border-dark rounded-lg p-3 focus:ring-primary focus:border-primary transition-colors" placeholder="Type your question here..." rows="3"></textarea>
-                          <div className="flex justify-end mt-2">
-                            <button className="bg-primary text-white font-bold py-2 px-6 rounded-lg hover:bg-primary/90 transition-colors" type="submit">Submit</button>
-                          </div>
-                        </form>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </section>
+  <h3 className="text-2xl font-bold mb-6">Customer Q&A</h3>
+  <div className="space-y-6">
+    {/* 1. Use packageData instead of PACKAGE_DATA */}
+    {packageData.qna.map((item, index) => (
+      <div key={index} className="bg-background-light dark:bg-background-dark p-4 rounded-lg border border-white/5">
+        <div className="flex items-start space-x-3">
+          <div className="flex-shrink-0">
+            <img alt="User avatar" className="w-8 h-8 rounded-full" src={item.avatar} />
+          </div>
+          <div className="flex-grow">
+            <p className="font-semibold">{item.question}</p>
+            <p className="text-sm text-subtext-dark mt-1">{item.answer}</p>
+          </div>
+        </div>
+      </div>
+    ))}
+
+    <div className="mt-6">
+      <h4 className="font-semibold mb-3 text-primary">Ask a Question</h4>
+      <div className="flex items-start space-x-3">
+        <div className="flex-shrink-0">
+          <img alt="Your avatar" className="w-10 h-10 rounded-full" src="https://ui-avatars.com/api/?name=User&background=056bd1&color=fff" />
+        </div>
+        <div className="flex-grow">
+          {/* 2. Bind the form to the handler and state */}
+          <form onSubmit={handlePostQuestion}>
+            <textarea 
+              className="w-full bg-background-light dark:bg-background-dark border border-gray-300 dark:border-border-dark rounded-lg p-3 focus:ring-primary focus:border-primary transition-colors text-white" 
+              placeholder="Type your question here..." 
+              rows="3"
+              value={questionText}
+              onChange={(e) => setQuestionText(e.target.value)}
+              required
+            ></textarea>
+            <div className="flex justify-end mt-2">
+              <button 
+                className="bg-primary text-white font-bold py-2 px-6 rounded-lg hover:bg-primary/90 transition-all" 
+                type="submit"
+              >
+                Submit
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
               <HostedByAgent />
             </div>

@@ -33,9 +33,9 @@ const ActivityCard = ({ title, description, imageSrc, viewLink, duration, schedu
       
       <p className="text-sm text-subtext-dark leading-relaxed">{description}</p>
       
-      <a className="inline-block text-sm font-semibold text-primary hover:underline" href={viewLink}>
+      {/* <a className="inline-block text-sm font-semibold text-primary hover:underline" href={viewLink}>
         View More
-      </a>
+      </a> */}
     </div>
   </div>
 );

@@ -1,8 +1,13 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const HostPackageCard = ({ title, desc, img }) => {
+  const navigate = useNavigate();
+  const handleClick = () => {
+    navigate('/packageDetail');
+  };
   return (
-    <div className="
+    <div onClick={handleClick} className="
       /* Layout & Sizing */
       flex h-full flex-col gap-3 
       rounded-lg 

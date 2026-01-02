@@ -18,7 +18,7 @@ const RoomManagementPage = () => {
   ]);
 
   // Dummy Data for Rooms
-  const [roomsData] = useState({
+  const [roomsData, setRoomsData] = useState({
     1: [
       { id: 101, type: "Deluxe Suite", price: 250, available: true },
       { id: 102, type: "Standard Room", price: 150, available: true },
@@ -48,6 +48,16 @@ const RoomManagementPage = () => {
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setSelectedRoomId(null);
+  };
+
+  // Logic to delete a room
+  const handleDeleteRoom = (roomId) => {
+    if (window.confirm("Are you sure you want to delete this room?")) {
+      setRoomsData(prev => ({
+        ...prev,
+        [selectedHotelId]: prev[selectedHotelId].filter(room => room.id !== roomId)
+      }));
+    }
   };
 
   // Filter Logic
@@ -162,7 +172,12 @@ const RoomManagementPage = () => {
                           <span className="material-symbols-outlined !text-xl">visibility</span>
                         </button>
                         <button onClick={() => handleViewRoom(room.id)} className="icon-btn hover:text-primary"><span className="material-symbols-outlined !text-xl">edit</span></button>
-                        <button className="icon-btn hover:text-red-500"><span className="material-symbols-outlined !text-xl">delete</span></button>
+                        <button 
+                          onClick={() => handleDeleteRoom(room.id)}
+                          className="icon-btn hover:text-red-500"
+                        >
+                          <span className="material-symbols-outlined !text-xl">delete</span>
+                        </button>
                       </div>
                     </td>
                   </tr>

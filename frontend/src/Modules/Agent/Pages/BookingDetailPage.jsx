@@ -155,9 +155,9 @@ const BookingDetailsPage = ({ role = 'agent' }) => {
                             Day 3: Village exploration and gourmet dining. Day 4-6: Spa treatments and optional ice climbing. 
                             Experience the peak of luxury in the Swiss Alps with curated experiences and premium amenities.
                           </p>
-                          <button onClick={() => handleAction('View Full Package')} className="mt-6 flex items-center gap-2 text-xs font-bold text-primary hover:underline transition-all">
+                          {/* <button onClick={() => handleAction('View Full Package')} className="mt-6 flex items-center gap-2 text-xs font-bold text-primary hover:underline transition-all">
                             VIEW FULL PACKAGE DETAILS <span className="material-symbols-outlined text-sm">open_in_new</span>
-                          </button>
+                          </button> */}
                         </div>
                         <div 
                           className="h-48 md:h-auto bg-cover bg-center bg-no-repeat min-h-[200px] grayscale-[20%] hover:grayscale-0 transition-all duration-500"
@@ -240,7 +240,6 @@ const BookingDetailsPage = ({ role = 'agent' }) => {
                   <div className="text-center py-12 bg-slate-50 dark:bg-slate-900/30 rounded-xl border-2 border-dashed border-slate-200 dark:border-slate-800">
                     <span className="material-symbols-outlined text-5xl text-slate-300 dark:text-slate-700">confirmation_number</span>
                     <p className="mt-2 text-sm text-slate-500 font-medium">No active support tickets found.</p>
-                    <button onClick={() => handleAction('Create Ticket')} className="mt-4 text-xs font-bold text-primary hover:underline uppercase">Create New Ticket</button>
                   </div>
                 )}
               </div>

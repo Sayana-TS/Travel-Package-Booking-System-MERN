@@ -35,8 +35,8 @@ const AuthPage = ({ role = 'user' }) => {
   const handleLoginSubmit = (e) => {
     e.preventDefault();
     // Logic: check credentials -> navigate based on role
-    if (role === 'admin') navigate('/admin/dashboard');
-    else if (role === 'agent') navigate('/agent/dashboard');
+    if (role === 'admin') navigate('/admin');
+    else if (role === 'agent') navigate('/agent');
     else navigate('/');
   };
 

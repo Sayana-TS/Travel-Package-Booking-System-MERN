@@ -37,9 +37,6 @@ const Testimonials = () => (
         ))}
       </div>
     </div>
-    <div className="text-center mt-8">
-      <a className="px-6 py-3 bg-primary/20 text-primary font-semibold rounded-lg hover:bg-primary hover:text-white transition-colors" href="#">View All Reviews</a>
-    </div>
   </section>
 );
 

@@ -69,14 +69,14 @@ const BookingDetailsForm = ({ data }) => {
                 {travelerForms}
 
                 {/* Save Details Checkbox */}
-                <div className="mt-4 flex items-center gap-3">
+                {/* <div className="mt-4 flex items-center gap-3">
                     <input 
                         className="form-checkbox h-5 w-5 rounded bg-white/10 text-primary border-white/20 checked:bg-primary" 
                         id="save-details" 
                         type="checkbox" 
                     />
                     <label className="text-sm text-white/80" htmlFor="save-details">Save traveler details for future bookings</label>
-                </div>
+                </div> */}
             </section>
             
             {/* Special Requests */}

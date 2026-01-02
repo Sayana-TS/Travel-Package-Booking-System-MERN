@@ -33,20 +33,15 @@ const PackagesPage = () => {
   });
 
   // -----------------------
-  // Load query params from URL (including Category)
+  // Load query params from URL
   // -----------------------
   useEffect(() => {
     const params = new URLSearchParams(location.search);
-
     const qSearch = params.get("search") || "";
     const qDestination = params.get("destination") || "";
     const qType = params.get("type") || "";
-    const qTravelers = params.get("travelers") || "";
-    const qDate = params.get("date") || "";
-    const qPrice = params.get("price") || "";
-    
-    // NEW: Capture category from URL
     const qCategory = params.get("category") || "All";
+    const qPrice = params.get("price") || "";
 
     if (qSearch) setSearch(qSearch);
     setSelectedCategory(qCategory);
@@ -55,8 +50,6 @@ const PackagesPage = () => {
       ...prev,
       destination: qDestination || prev.destination,
       type: qType || prev.type,
-      travelers: qTravelers || prev.travelers,
-      travelDates: qDate || prev.travelDates,
       price: qPrice ? qPrice.split("-").map(Number) : prev.price,
     }));
 
@@ -64,7 +57,7 @@ const PackagesPage = () => {
   }, [location.search]);
 
   // -----------------------
-  // Update filter manually
+  // Handlers
   // -----------------------
   const handleFilterChange = (key, value) => {
     setFilters((prev) => ({ ...prev, [key]: value }));
@@ -73,7 +66,6 @@ const PackagesPage = () => {
 
   const handleClear = () => {
     setSearch("");
-    // Clear URL params and reset local state
     navigate("/packages"); 
     setFilters({
       destination: "",
@@ -91,15 +83,9 @@ const PackagesPage = () => {
   // -----------------------
   const filteredPackages = useMemo(() => {
     let allPackages = [
-      ...recommended,
-      ...featured,
-      ...ongoing,
-      ...upcoming,
-      ...popular,
-      ...budgetFriendly,
+      ...recommended, ...featured, ...ongoing, ...upcoming, ...popular, ...budgetFriendly,
     ];
 
-    // Data Sanitization: Convert price string → number
     allPackages = allPackages.map((pkg) => {
       let numPrice = 0;
       if (typeof pkg.price === "string") {
@@ -111,73 +97,61 @@ const PackagesPage = () => {
       return { ...pkg, numericPrice: numPrice };
     });
 
-    // 1. URL Category Filter
     if (selectedCategory !== "All") {
       allPackages = allPackages.filter((pkg) => 
         pkg.category === selectedCategory || pkg.type === selectedCategory
       );
     }
 
-    // 2. Search filter
     if (search.trim()) {
       allPackages = allPackages.filter((pkg) =>
-        pkg.title.toLowerCase().includes(search.toLowerCase())
+        pkg.title.toLowerCase().includes(search.toLowerCase()) ||
+        pkg.destination?.toLowerCase().includes(search.toLowerCase())
       );
     }
 
-    // Destination filter
-if (filters.destination) {
-  allPackages = allPackages.filter(
-    (pkg) =>
-      pkg.destination?.toLowerCase() === 
-      filters.destination.toLowerCase()
-  );
-}
+    if (filters.destination) {
+      allPackages = allPackages.filter((pkg) =>
+        pkg.destination?.toLowerCase() === filters.destination.toLowerCase()
+      );
+    }
 
-    // 4. Sidebar Type filter
     if (filters.type) {
       allPackages = allPackages.filter((pkg) => pkg.type === filters.type);
     }
 
-    // 5. Travelers filter
     if (filters.travelers) {
       allPackages = allPackages.filter((pkg) =>
         pkg.travelers?.includes(filters.travelers)
       );
     }
 
-    // 6. Price filter
     if (filters.price && filters.price.length === 2) {
-      allPackages = allPackages.filter(
-        (pkg) =>
+      allPackages = allPackages.filter((pkg) =>
           pkg.numericPrice >= filters.price[0] &&
           pkg.numericPrice <= filters.price[1]
       );
     }
 
-    // Sorting
-    if (filters.sortBy === "low-high")
-      allPackages.sort((a, b) => a.numericPrice - b.numericPrice);
-    if (filters.sortBy === "high-low")
-      allPackages.sort((a, b) => b.numericPrice - a.numericPrice);
-    if (filters.sortBy === "rating")
-      allPackages.sort((a, b) => b.rating - a.rating);
-    if (filters.sortBy === "popularity")
-      allPackages.sort((a, b) => b.popularity - a.popularity);
+    const sorted = [...allPackages];
+    if (filters.sortBy === "low-high") sorted.sort((a, b) => a.numericPrice - b.numericPrice);
+    if (filters.sortBy === "high-low") sorted.sort((a, b) => b.numericPrice - a.numericPrice);
+    if (filters.sortBy === "rating") sorted.sort((a, b) => b.rating - a.rating);
+    if (filters.sortBy === "popularity") sorted.sort((a, b) => b.popularity - a.popularity);
 
-    return allPackages;
+    return sorted;
   }, [search, filters, selectedCategory]);
 
   // -----------------------
-  // Pagination
+  // Pagination Calculation (FIX APPLIED)
   // -----------------------
   const cardsPerPage = 6;
   const totalPages = Math.ceil(filteredPackages.length / cardsPerPage);
 
-  const currentData = filteredPackages.slice(
-    (currentPage - 1) * cardsPerPage,
-    currentPage * cardsPerPage
-  );
+  const currentData = useMemo(() => {
+    const start = (currentPage - 1) * cardsPerPage;
+    return filteredPackages.slice(start, start + cardsPerPage);
+  }, [filteredPackages, currentPage]);
 
   const changePage = (page) => {
     if (page >= 1 && page <= totalPages) setCurrentPage(page);
@@ -186,16 +160,14 @@ if (filters.destination) {
   return (
     <UserLayout>
       <div className="flex flex-col lg:flex-row w-full py-2 gap-6">
-        {/* Sidebar */}
         <FilterSidebar
           search={search}
-          onSearchChange={setSearch}
+          onSearchChange={(val) => { setSearch(val); setCurrentPage(1); }}
           filters={filters}
           onFilterChange={handleFilterChange}
           onClear={handleClear}
         />
 
-        {/* Package Listing */}
         <div className="flex-1">
           <div className="mb-6">
             <h2 className="text-2xl font-bold text-white">
@@ -206,19 +178,12 @@ if (filters.destination) {
             </h2>
           </div>
 
-          {/* Cards */}
           <div className="grid grid-cols-2 lg:grid-cols-3 gap-6 w-full">
-            {currentData.map((pkg) => (
+            {currentData.map((pkg, index) => (
               <PackageCard
-                key={pkg.id}
-                image={pkg.image}
-                label={pkg.label}
-                labelColor={pkg.labelColor}
-                title={pkg.title}
-                description={pkg.description}
-                rating={pkg.rating}
-                duration={pkg.duration}
-                price={pkg.price}
+                /* KEY FIX: Combining index and filters forces React to redraw the cards */
+                key={`${pkg.id}-${search}-${filters.destination}-${filters.sortBy}-${index}`}
+                {...pkg}
                 cta={
                   <button onClick={()=>navigate('/packageDetail')} className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/80 transition w-full">
                     Book Now
@@ -228,24 +193,20 @@ if (filters.destination) {
             ))}
           </div>
 
-          {/* Empty State */}
           {filteredPackages.length === 0 && (
             <div className="text-center py-20 bg-white/5 rounded-xl border border-dashed border-white/10 mt-4">
-              <p className="text-gray-400">
-                No packages found for this category or filter.
-              </p>
+              <p className="text-gray-400">No packages found for this category or filter.</p>
               <button onClick={handleClear} className="mt-4 text-primary hover:underline">
                 Reset All Filters
               </button>
             </div>
           )}
 
-          {/* Pagination */}
           {filteredPackages.length > 0 && (
             <div className="flex justify-center items-center gap-2 mt-12 mb-8">
               <button
                 onClick={() => changePage(currentPage - 1)}
-                className="px-4 py-2 rounded-lg bg-gray-800 text-white hover:bg-gray-700 transition disabled:opacity-40"
+                className="px-4 py-2 rounded-lg bg-gray-800 text-white disabled:opacity-40"
                 disabled={currentPage === 1}
               >
                 Prev
@@ -256,9 +217,7 @@ if (filters.destination) {
                   key={i}
                   onClick={() => changePage(i + 1)}
                   className={`w-10 h-10 rounded-lg transition ${
-                    currentPage === i + 1
-                      ? "bg-primary text-white"
-                      : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                    currentPage === i + 1 ? "bg-primary text-white" : "bg-gray-800 text-gray-300 hover:bg-gray-700"
                   }`}
                 >
                   {i + 1}
@@ -267,7 +226,7 @@ if (filters.destination) {
 
               <button
                 onClick={() => changePage(currentPage + 1)}
-                className="px-4 py-2 rounded-lg bg-gray-800 text-white hover:bg-gray-700 transition disabled:opacity-40"
+                className="px-4 py-2 rounded-lg bg-gray-800 text-white disabled:opacity-40"
                 disabled={currentPage === totalPages}
               >
                 Next

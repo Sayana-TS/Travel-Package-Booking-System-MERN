@@ -83,7 +83,7 @@ const AgentDashboard = () => {
         <section>
           <div className="flex items-center justify-between mb-4 sm:mb-6">
             <h2 className="text-lg sm:text-2xl font-bold text-white">Recent Bookings</h2>
-            <Link to="/bookings" className="text-[10px] font-bold uppercase tracking-widest text-[#056bd1] hover:text-blue-400 transition-colors">View All</Link>
+            <Link to="/agent/bookings" className="text-[10px] font-bold uppercase tracking-widest text-[#056bd1] hover:text-blue-400 transition-colors">View All</Link>
           </div>
           <BookingTable bookings={DASHBOARD_DATA.bookings} />
         </section>

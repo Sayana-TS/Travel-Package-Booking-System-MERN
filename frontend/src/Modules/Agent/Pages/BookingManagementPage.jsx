@@ -30,7 +30,7 @@ const BookingsManagementPage = ({ role = 'agent' }) => {
   const navigate = useNavigate();
 
   // --- Dummy Data ---
-  const [bookings] = useState([
+  const [bookings, setBookings] = useState([
     { id: "BK12345", customer: "Sophia Clark", email: "sophia.clark@email.com", package: "Luxury Beach Getaway", checkIn: "2024-08-15", checkOut: "2024-08-22", amount: 2500, paymentStatus: "Paid", status: "Confirmed" },
     { id: "BK12346", customer: "Ethan Carter", email: "ethan.carter@email.com", package: "Mountain Adventure", checkIn: "2024-09-01", checkOut: "2024-09-08", amount: 3200, paymentStatus: "Paid", status: "Confirmed" },
     { id: "BK12347", customer: "Olivia Davis", email: "olivia.davis@email.com", package: "City Exploration", checkIn: "2024-10-10", checkOut: "2024-10-15", amount: 1800, paymentStatus: "Pending", status: "Pending" },
@@ -56,6 +56,12 @@ const BookingsManagementPage = ({ role = 'agent' }) => {
   const resetFilters = () => {
     setFilters({ search: "", date: "", status: "", paymentStatus: "" });
     setCurrentPage(1);
+  };
+
+  const handleDelete = (id) => {
+    if (window.confirm("Are you sure you want to delete this booking?")) {
+        setBookings(prev => prev.filter(booking => booking.id !== id));
+    }
   };
 
   const filteredBookings = useMemo(() => {
@@ -196,7 +202,11 @@ const BookingsManagementPage = ({ role = 'agent' }) => {
                           </button>
                           
                           {!isAdmin && (
-                            <button title="Cancel" className="p-2 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 text-red-500 transition-colors">
+                            <button 
+                                onClick={() => handleDelete(booking.id)}
+                                title="Cancel" 
+                                className="p-2 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 text-red-500 transition-colors"
+                            >
                               <span className="material-symbols-outlined text-lg">cancel</span>
                             </button>
                           )}

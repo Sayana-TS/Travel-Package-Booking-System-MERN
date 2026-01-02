@@ -71,6 +71,37 @@ const HostProfilePage = () => {
   const [activeTab, setActiveTab] = useState('Landscapes');
   const [showReviewForm, setShowReviewForm] = useState(false);
 
+  // --- NEW STATES ---
+  const [reviews, setReviews] = useState(REVIEWS_DATA);
+  const [newComment, setNewComment] = useState("");
+  const [rating, setRating] = useState(5);
+
+  const handlePostReview = () => {
+    if (!newComment.trim()) return;
+  
+    const newEntry = {
+      id: Date.now(),
+      name: "You", // In a real app, this would be the logged-in user's name
+      date: new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
+      rating: rating,
+      img: "https://ui-avatars.com/api/?name=User&background=056bd1&color=fff",
+      likes: "0",
+      comment: newComment
+    };
+  
+    setReviews([newEntry, ...reviews]); // Add new review to the top
+    setNewComment(""); // Clear text
+    setShowReviewForm(false); // Hide form
+  };
+
+  const handleMessageHost = () => {
+    const email = "elena.rodriguez@example.com";
+    const subject = encodeURIComponent("Question about your travel packages");
+    const body = encodeURIComponent("Hi Elena, I'm interested in booking a trip with you...");
+    
+    window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+  };
+
   return (
     <UserLayout>
       <div className="min-h-screen bg-background-dark flex justify-center py-5 md:py-10 font-display">
@@ -89,9 +120,12 @@ const HostProfilePage = () => {
                 <p className="text-primary text-sm font-semibold mt-1">★ 4.8 · 234 reviews</p>
               </div>
             </div>
-            <button className="w-full sm:w-auto flex min-w-[140px] cursor-pointer items-center justify-center rounded-xl h-12 px-6 bg-primary text-white text-sm font-bold hover:opacity-90 transition-all">
-              Message Host
-            </button>
+            <button 
+  onClick={handleMessageHost}
+  className="w-full sm:w-auto flex min-w-[140px] cursor-pointer items-center justify-center rounded-xl h-12 px-6 bg-primary text-white text-sm font-bold hover:opacity-90 transition-all"
+>
+  Message Host
+</button>
           </div>
 
           {/* ALL PACKAGES */}
@@ -142,33 +176,56 @@ const HostProfilePage = () => {
           </div>
 
           {/* REVIEWS */}
-          <div className="flex flex-col">
-            <SectionTitle>Reviews & Ratings</SectionTitle>
-            <div className="flex flex-col gap-6 md:gap-8 p-4">
-              {REVIEWS_DATA.map(review => (
-                <HostReviewCard key={review.id} {...review} />
-              ))}
-              
-              <div className="mt-2">
-                <button 
-                  onClick={() => setShowReviewForm(!showReviewForm)}
-                  className="w-full flex items-center justify-center rounded-xl h-12 bg-card-dark text-white font-bold hover:bg-white/10 transition-all"
-                >
-                  {showReviewForm ? 'Cancel' : 'Write a review'}
-                </button>
-                {showReviewForm && (
-                  <div className="mt-4 p-4 rounded-2xl bg-card-dark flex flex-col gap-4 animate-in fade-in slide-in-from-top-4">
-                    <textarea 
-                      className="w-full bg-background-dark border border-white/10 rounded-xl p-4 text-white outline-none focus:border-primary transition-colors" 
-                      placeholder="Share your experience with Elena..." 
-                      rows="4" 
-                    />
-                    <button className="bg-primary text-white font-bold h-12 rounded-xl hover:brightness-110">Post Review</button>
-                  </div>
-                )}
-              </div>
-            </div>
+<div className="flex flex-col">
+  <SectionTitle>Reviews & Ratings</SectionTitle>
+  <div className="flex flex-col gap-6 md:gap-8 p-4">
+    {/* Use the state variable 'reviews' here */}
+    {reviews.map(review => (
+      <HostReviewCard key={review.id} {...review} />
+    ))}
+    
+    <div className="mt-2">
+      <button 
+        onClick={() => setShowReviewForm(!showReviewForm)}
+        className="w-full flex items-center justify-center rounded-xl h-12 bg-card-dark text-white font-bold hover:bg-white/10 transition-all"
+      >
+        {showReviewForm ? 'Cancel' : 'Write a review'}
+      </button>
+
+      {showReviewForm && (
+        <div className="mt-4 p-4 rounded-2xl bg-card-dark flex flex-col gap-4 animate-in fade-in slide-in-from-top-4">
+          {/* Rating Selector */}
+          <div className="flex gap-2 items-center">
+            <p className="text-white text-sm">Rating:</p>
+            {[1, 2, 3, 4, 5].map((star) => (
+              <button 
+                key={star}
+                onClick={() => setRating(star)}
+                className={`text-xl ${rating >= star ? 'text-yellow-500' : 'text-gray-500'}`}
+              >
+                ★
+              </button>
+            ))}
           </div>
+
+          <textarea 
+            className="w-full bg-background-dark border border-white/10 rounded-xl p-4 text-white outline-none focus:border-primary transition-colors" 
+            placeholder="Share your experience with Elena..." 
+            rows="4" 
+            value={newComment}
+            onChange={(e) => setNewComment(e.target.value)}
+          />
+          <button 
+            onClick={handlePostReview}
+            className="bg-primary text-white font-bold h-12 rounded-xl hover:brightness-110 transition-all"
+          >
+            Post Review
+          </button>
+        </div>
+      )}
+    </div>
+  </div>
+</div>
 
           {/* CONTACT & SOCIAL LINKS */}
           <div className="flex flex-col">
@@ -177,12 +234,15 @@ const HostProfilePage = () => {
             </h2>
             <div className="flex justify-stretch">
               <div className="flex flex-1 gap-3 flex-wrap px-4 py-3 justify-start">
-                <button className="flex-1 sm:flex-none min-w-[140px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 bg-primary text-white text-sm font-bold tracking-[0.015em] hover:opacity-90">
-                  <span className="truncate">Message Host</span>
-                </button>
-                <button className="flex-1 sm:flex-none min-w-[140px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 bg-card-dark text-white text-sm font-bold tracking-[0.015em] hover:bg-white/10">
+              <button 
+  onClick={handleMessageHost}
+  className="w-full sm:w-auto flex min-w-[140px] cursor-pointer items-center justify-center rounded-xl h-12 px-6 bg-primary text-white text-sm font-bold hover:opacity-90 transition-all"
+>
+  Message Host
+</button>
+                {/* <button className="flex-1 sm:flex-none min-w-[140px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 bg-card-dark text-white text-sm font-bold tracking-[0.015em] hover:bg-white/10">
                   <span className="truncate">Email</span>
-                </button>
+                </button> */}
               </div>
             </div>
 
