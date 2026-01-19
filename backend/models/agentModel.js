@@ -1,4 +1,7 @@
 // models/Agent.js - The Professional Business Profile
+import mongoose from "mongoose";
+
+
 const agentSchema = new mongoose.Schema({
   user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true, unique: true },
   businessName: { type: String, required: true },

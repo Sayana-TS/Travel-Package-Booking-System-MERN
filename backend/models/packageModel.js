@@ -1,4 +1,6 @@
 // models/Package.js
+import mongoose from "mongoose";
+
 const packageSchema = new mongoose.Schema({
   agent: { type: mongoose.Schema.Types.ObjectId, ref: "Agent", required: true },
   title: { type: String, required: true },

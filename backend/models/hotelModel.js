@@ -1,4 +1,6 @@
 // models/Hotel.js
+import mongoose from "mongoose";
+
 const hotelSchema = new mongoose.Schema({
   agent: { type: mongoose.Schema.Types.ObjectId, ref: "Agent", required: true },
   name: { type: String, required: true },
