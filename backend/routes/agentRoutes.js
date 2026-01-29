@@ -1,5 +1,6 @@
 import express from "express";
 import { protect, authorize } from "../middlewares/authMiddlewares.js";
+import {createAgentProfile, getAgentPublicProfile, getMyAgentProfile, verifyAgent} from "../controllers/agentController.js"
 
 const router = express.Router();
 
@@ -17,5 +18,15 @@ router.get(
     });
   }
 );
+
+// Agent
+router.post("/", protect, authorize("agent"), createAgentProfile);
+router.get("/me", protect, authorize("agent"), getMyAgentProfile);
+
+// Admin
+router.put("/:id/verify", protect, authorize("admin"), verifyAgent);
+
+// Public
+router.get("/:id", getAgentPublicProfile);
 
 export default router;
