@@ -1,6 +1,7 @@
 import Booking from "../models/bookingModel.js";
 import Package from "../models/packageModel.js";
 import { updateBookingIfNeeded } from "../utils/updateBookingStatus.js";
+import Notification from "../models/notificationModel.js"
 
 export const createBooking = async (req, res) => {
   try {
@@ -30,6 +31,16 @@ export const createBooking = async (req, res) => {
       status: "pending",
       timeline: [{ event: "Booking Created" }]
     });
+
+    // Trigger Agent Notification
+await Notification.create({
+  recipient: pkg.agent.user, // Reference the User ID associated with the Agent profile
+  type: "new_submission",
+  priority: "high",
+  title: "New Booking Request",
+  message: `Sophia Clark (Example) requested a booking for ${pkg.title}.`,
+  link: `/agent/bookings/${booking._id}`
+});
 
     res.status(201).json(booking);
 
@@ -210,13 +221,3 @@ export const confirmBooking = async (req, res) => {
     }
   };
   
-
-  // Trigger Agent Notification
-await Notification.create({
-  recipient: pkg.agent.user, // Reference the User ID associated with the Agent profile
-  type: "new_submission",
-  priority: "high",
-  title: "New Booking Request",
-  message: `Sophia Clark (Example) requested a booking for ${pkg.title}.`,
-  link: `/agent/bookings/${booking._id}`
-});

@@ -81,4 +81,13 @@ const bookingSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+// Add pre-save middleware for auto-generating bookingID
+bookingSchema.pre('save', async function(next) {
+  if (!this.bookingID) {
+    const count = await mongoose.model('Booking').countDocuments();
+    this.bookingID = `BK${Date.now().toString().slice(-6)}${(count + 1).toString().padStart(4, '0')}`;
+  }
+  next();
+});
+
 export default mongoose.model("Booking", bookingSchema);

@@ -22,7 +22,11 @@ export const makePayment = async (req, res) => {
       transactionId
     };
 
-    booking.timeline.push({ event: "Payment Successful" });
+    // In makePayment
+booking.timeline.push({ 
+  event: "Payment Received", // Matches Flow #3/11 text
+  date: new Date() 
+});
 
     await booking.save();
 

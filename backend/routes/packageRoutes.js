@@ -10,9 +10,12 @@ import {
   getPendingPackages,
   addSeasonalPricing,
   getFeaturedPackages,
-  toggleFeatured
+  toggleFeatured,
+  getPackageCategories,
+  searchPackages
 } from "../controllers/packageController.js";
 import { protect, authorize, isAgentOwner } from "../middlewares/authMiddlewares.js";
+import Package from "../models/packageModel.js"
 
 const router = express.Router();
 
@@ -25,6 +28,8 @@ router.put("/:id/seasonal-pricing", protect, authorize("agent"), isAgentOwner(Pa
 // Public
 router.get("/", getPublicPackages);
 router.get("/featured/list", getFeaturedPackages); // Specifically for Home Page Hero
+router.get("/search", searchPackages);
+router.get("/categories", getPackageCategories);
 
 // Admin
 router.get("/admin/pending", protect, authorize("admin"), getPendingPackages);

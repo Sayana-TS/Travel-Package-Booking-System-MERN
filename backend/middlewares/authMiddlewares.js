@@ -16,18 +16,29 @@ export const protect = async (req, res, next) => {
 
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-      req.user = await User.findById(decoded.id).select("-password");
+      req.user = await User.findById(decoded.id)
+        .select("-password")
+        .lean(); // Use lean() for performance
+
+        if (!req.user) {
+          return res.status(401).json({ message: "User not found" });
+        }
 
       if (req.user.role === "agent") {
         const agent = await Agent.findOne({ user: req.user._id });
         if (agent) {
           req.user.agentId = agent._id;
+          req.user.agentProfile = agent; // Optional: store full agent data
         }
       }
+
+      // Also add for admin/any role consistency
+      req.user = { ...req.user, _id: req.user._id.toString() };
       
 
       next();
     } catch (error) {
+      console.error("Auth Middleware Error:", error);
       return res.status(401).json({ message: "Not authorized, token failed" });
     }
   }
@@ -95,9 +106,8 @@ export const isAgentOwner = (Model, paramId = "id") => {
         return res.status(403).json({ message: "Agent access only" });
       }
 
-      const agent = await Agent.findOne({ user: req.user._id });
-
-      if (!agent) {
+      // Use agentId from protect middleware
+      if (!req.user.agentId) {
         return res.status(404).json({ message: "Agent profile not found" });
       }
 
@@ -107,11 +117,10 @@ export const isAgentOwner = (Model, paramId = "id") => {
         return res.status(404).json({ message: "Resource not found" });
       }
 
-      if (resource.agent.toString() !== agent._id.toString()) {
+      if (resource.agent.toString() !== req.user.agentId.toString()) {
         return res.status(403).json({ message: "Not your resource" });
       }
 
-      req.agent = agent;
       req.resource = resource;
       next();
     } catch (error) {

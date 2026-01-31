@@ -75,4 +75,28 @@ const packageSchema = new mongoose.Schema({
   completionPercentage: { type: Number, default: 0 }
 }, { timestamps: true });
 
+// Add this before the export
+packageSchema.pre('save', function(next) {
+  if (this.weatherForecast.daily.length > 0) {
+    const totalTemp = this.weatherForecast.daily.reduce((acc, day) => acc + day.temp, 0);
+    this.weatherForecast.averageTemp = totalTemp / this.weatherForecast.daily.length;
+  }
+  next();
+});
+
+// Current issue: Missing price calculations for seasonal pricing
+// Add virtual field for current price
+packageSchema.virtual('currentPrice').get(function() {
+  const now = new Date();
+  const seasonal = this.seasonalPricing.find(sp => 
+    now >= sp.startDate && now <= sp.endDate
+  );
+  
+  if (seasonal) return seasonal.finalPrice;
+  
+  const base = this.pricing.basePrice;
+  const discount = base * (this.pricing.globalDiscount / 100);
+  return base - discount;
+});
+
 export default mongoose.model("Package", packageSchema);

@@ -2,6 +2,8 @@ import User from "../models/userModel.js";
 import Package from "../models/packageModel.js";
 import Booking from "../models/bookingModel.js";
 import Agent from "../models/agentModel.js";
+import Notification from "../models/notificationModel.js"
+
 
 // @desc    Get comprehensive dashboard stats (Admin Flow #2)
 // @route   GET /api/admin/dashboard-stats
@@ -29,6 +31,15 @@ export const getDashboardStats = async (req, res) => {
       }
     ]);
 
+    const alerts = await Notification.find({ 
+      $or: [
+          { recipient: req.user._id },
+          { type: "system_alert" } // Ensure high-priority tickets show up here
+      ] 
+  })
+  .sort({ createdAt: -1 })
+  .limit(5);
+
     // 5. Fetch Recent Package Submissions (Table in Flow #2)
     const recentPackages = await Package.find()
       .populate("agent", "businessName")
@@ -44,7 +55,8 @@ export const getDashboardStats = async (req, res) => {
         totalBookings,
         revenue: revenueData[0]?.totalRevenue || 0
       },
-      recentPackages
+      recentPackages,
+      alerts
     });
   } catch (err) {
     res.status(500).json({ message: err.message });

@@ -25,7 +25,14 @@ const agentSchema = new mongoose.Schema({
   },
   stats: {
     satisfaction: { type: Number, default: 0 },
-    monthlyRevenue: { type: Number, default: 0 }
+  monthlyRevenue: { type: Number, default: 0 },
+  totalBookings: { type: Number, default: 0 },
+  activePackages: { type: Number, default: 0 },
+  totalHotels: { type: Number, default: 0 },
+  totalRooms: { type: Number, default: 0 },
+  // For trend calculation
+  previousMonthRevenue: { type: Number, default: 0 },
+  bookingTrend: { type: String, enum: ["up", "down", "stable"], default: "stable" }
   }
 }, { timestamps: true });
 
