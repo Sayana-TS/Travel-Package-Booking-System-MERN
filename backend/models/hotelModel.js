@@ -15,16 +15,30 @@ const hotelSchema = new mongoose.Schema({
     longitude: Number,
     address: String
   },
-  rooms: [{
-    roomType: String,
-    pricePerNight: Number,
-    totalRooms: Number,
-    maxOccupancy: Number,
-    description: String,
-    amenities: [String],
-    images: [String],
-    status: { type: String, enum: ["available", "unavailable", "occupied"], default: "available" }
+  // Update the rooms array in hotelSchema:
+rooms: [{
+  roomId: { type: String, unique: true, default: () => `RM${Date.now()}${Math.random().toString(36).substr(2, 5)}` },
+  title: { type: String, required: true },
+  roomType: { type: String, required: true },
+  pricePerNight: { type: Number, required: true },
+  totalRooms: { type: Number, required: true, default: 1 },
+  availableRooms: { type: Number, default: 1 },
+  maxOccupancy: { type: Number, required: true, default: 2 },
+  description: String,
+  amenities: [String],
+  images: [String],
+  status: { 
+    type: String, 
+    enum: ["available", "unavailable", "occupied", "maintenance"], 
+    default: "available" 
+  },
+  features: [{
+    name: String,
+    included: { type: Boolean, default: true }
   }],
+  createdAt: { type: Date, default: Date.now },
+  updatedAt: { type: Date, default: Date.now }
+}],
   status: { type: String, enum: ["active", "inactive"], default: "active" },
   rating: { type: Number, default: 0 }
 }, { timestamps: true });

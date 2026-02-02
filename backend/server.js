@@ -26,6 +26,9 @@ const startServer = async () => {
     const adminRoutes = (await import("./routes/adminRoutes.js")).default;
     const reviewRoutes = (await import("./routes/reviewRoutes.js")).default;
     const favoriteRoutes = (await import("./routes/favoriteRoutes.js")).default;
+    const roomRoutes = (await import("./routes/roomRoutes.js")).default;
+    const galleryRoutes = (await import("./routes/galleryRoutes.js")).default;
+    const seasonalPricingRoutes = (await import("./routes/seasonalPricingRoutes.js")).default;
 
     app.get("/", (req, res) => {
       res.send("API is running...");
@@ -43,7 +46,10 @@ const startServer = async () => {
     app.use("/api/admin", adminRoutes);
     app.use("/api/reviews", reviewRoutes);
     app.use("/api/favorites", favoriteRoutes);
-
+    app.use("/api/rooms", roomRoutes);
+    app.use("/api/gallery", galleryRoutes);
+    app.use("/api/seasonal-pricing", seasonalPricingRoutes);
+    
     const PORT = process.env.PORT || 5000;
     app.listen(PORT, () => {
       console.log(`🚀 Server running on port ${PORT}`);

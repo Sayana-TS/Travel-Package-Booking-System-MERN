@@ -8,7 +8,6 @@ import {
   getAllPackagesAdmin,
   getMyPackages,
   getPendingPackages,
-  addSeasonalPricing,
   getFeaturedPackages,
   toggleFeatured,
   getPackageCategories,
@@ -16,6 +15,11 @@ import {
 } from "../controllers/packageController.js";
 import { protect, authorize, isAgentOwner } from "../middlewares/authMiddlewares.js";
 import Package from "../models/packageModel.js"
+import { getPackageImages } from "../controllers/galleryController.js";
+import {
+  addSeasonalPricing,
+  getPackageSeasonalPricing
+} from "../controllers/seasonalPricingController.js";
 
 const router = express.Router();
 
@@ -23,7 +27,8 @@ const router = express.Router();
 router.post("/", protect, authorize("agent"), createPackage);
 router.get("/my", protect, authorize("agent"), getMyPackages);
 router.put("/:id/deactivate", protect, authorize("agent", "admin"), deactivatePackage);
-router.put("/:id/seasonal-pricing", protect, authorize("agent"), isAgentOwner(Package), addSeasonalPricing);
+router.get("/:id/seasonal-pricing", protect, authorize("agent"), getPackageSeasonalPricing);
+router.put("/:id/seasonal-pricing", protect, authorize("agent"), addSeasonalPricing);
 
 // Public
 router.get("/", getPublicPackages);
@@ -37,5 +42,8 @@ router.get("/admin/all", protect, authorize("admin"), getAllPackagesAdmin);
 router.put("/:id/approve", protect, authorize("admin"), approvePackage);
 router.put("/:id/reject", protect, authorize("admin"), rejectPackage);
 router.patch("/:id/featured", protect, authorize("admin"), toggleFeatured);
+
+// Get package images
+router.get("/:id/images", getPackageImages);
 
 export default router;

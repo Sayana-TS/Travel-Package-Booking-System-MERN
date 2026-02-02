@@ -163,36 +163,6 @@ export const approvePackage = async (req, res) => {
     }
   };
  
-  
-  // @desc    Update Package with Seasonal Pricing (Agent Flow #16/17)
-// @route   PUT /api/packages/:id/seasonal-pricing
-export const addSeasonalPricing = async (req, res) => {
-  try {
-    const { seasonName, startDate, endDate, discountPercentage } = req.body;
-    const pkg = await Package.findById(req.params.id);
-
-    if (!pkg) return res.status(404).json({ message: "Package not found" });
-
-    // Logic: Calculate final price based on base price and discount
-    const discountAmount = pkg.pricing.basePrice * (discountPercentage / 100);
-    const finalPrice = pkg.pricing.basePrice - discountAmount;
-
-    const newSeason = {
-      seasonName,
-      startDate,
-      endDate,
-      discountPercentage,
-      finalPrice
-    };
-
-    pkg.seasonalPricing.push(newSeason);
-    await pkg.save();
-
-    res.status(200).json({ message: "Seasonal pricing added", pkg });
-  } catch (err) {
-    res.status(400).json({ message: err.message });
-  }
-};
 
 // @desc    Toggle Featured Status (Admin Flow #4)
 // @route   PATCH /api/packages/:id/featured

@@ -52,11 +52,27 @@ const packageSchema = new mongoose.Schema({
 
   // Section 16/17: Seasonal Pricing
   seasonalPricing: [{
-    seasonName: String,
-    startDate: Date,
-    endDate: Date,
-    discountPercentage: Number,
-    finalPrice: Number
+    seasonName: { type: String, required: true },
+    startDate: { type: Date, required: true },
+    endDate: { type: Date, required: true },
+    discountPercentage: { 
+      type: Number, 
+      required: true,
+      min: 0,
+      max: 100,
+      default: 0
+    },
+    basePrice: { type: Number, required: true }, // Snapshot of price when season was created
+    finalPrice: { type: Number, required: true },
+    isActive: { 
+      type: Boolean, 
+      default: function() {
+        const now = new Date();
+        return now >= this.startDate && now <= this.endDate;
+      }
+    },
+    createdAt: { type: Date, default: Date.now },
+    updatedAt: { type: Date, default: Date.now }
   }],
 
   status: { 
@@ -84,19 +100,70 @@ packageSchema.pre('save', function(next) {
   next();
 });
 
-// Current issue: Missing price calculations for seasonal pricing
-// Add virtual field for current price
-packageSchema.virtual('currentPrice').get(function() {
+// Add a pre-save hook to update isActive status
+packageSchema.pre('save', function(next) {
+  if (this.seasonalPricing && this.seasonalPricing.length > 0) {
+    const now = new Date();
+    this.seasonalPricing.forEach(season => {
+      season.isActive = now >= season.startDate && now <= season.endDate;
+      season.updatedAt = new Date();
+    });
+  }
+  next();
+});
+
+// Add a virtual for current active seasonal price
+packageSchema.virtual('currentSeasonalPrice').get(function() {
+  if (!this.seasonalPricing || this.seasonalPricing.length === 0) {
+    return null;
+  }
+  
   const now = new Date();
-  const seasonal = this.seasonalPricing.find(sp => 
-    now >= sp.startDate && now <= sp.endDate
+  const activeSeason = this.seasonalPricing.find(season => 
+    now >= season.startDate && now <= season.endDate
   );
   
-  if (seasonal) return seasonal.finalPrice;
-  
-  const base = this.pricing.basePrice;
-  const discount = base * (this.pricing.globalDiscount / 100);
-  return base - discount;
+  return activeSeason || null;
 });
+
+// Add a virtual for current discounted price
+packageSchema.virtual('currentPrice').get(function() {
+  const basePrice = this.pricing.basePrice;
+  
+  // Check for active seasonal pricing
+  const activeSeason = this.currentSeasonalPrice;
+  if (activeSeason) {
+    return activeSeason.finalPrice;
+  }
+  
+  // Apply global discount if any
+  if (this.pricing.globalDiscount > 0) {
+    return basePrice * (1 - this.pricing.globalDiscount / 100);
+  }
+  
+  return basePrice;
+});
+
+// Add a method to calculate price for specific date
+packageSchema.methods.getPriceForDate = function(date) {
+  const basePrice = this.pricing.basePrice;
+  const targetDate = new Date(date);
+  
+  // Check for seasonal pricing on that date
+  const seasonForDate = this.seasonalPricing.find(season => 
+    targetDate >= season.startDate && targetDate <= season.endDate
+  );
+  
+  if (seasonForDate) {
+    return seasonForDate.finalPrice;
+  }
+  
+  // Apply global discount if any
+  if (this.pricing.globalDiscount > 0) {
+    return basePrice * (1 - this.pricing.globalDiscount / 100);
+  }
+  
+  return basePrice;
+};
 
 export default mongoose.model("Package", packageSchema);
